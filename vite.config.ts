@@ -1,13 +1,13 @@
-import { resolve } from 'path'
-import type { ConfigEnv } from 'vite'
-import { defineConfig, loadEnv } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import { resolve } from 'path';
+import type { ConfigEnv } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react-swc';
 
 // https://vitejs.dev/config/
 export default ({ command, mode }: ConfigEnv) => {
-  const currentEnv = loadEnv(mode, process.cwd())
-  console.log('Current mode:', command)
-  console.log('Current environment configuration:', currentEnv)
+  const currentEnv = loadEnv(mode, process.cwd());
+  console.log('Current mode:', command);
+  console.log('Current environment configuration:', currentEnv);
   return defineConfig({
     plugins: [
       react(),
@@ -29,11 +29,12 @@ export default ({ command, mode }: ConfigEnv) => {
       // 别名
       alias: {
         '@': resolve(__dirname, './src'),
-        '@components': resolve(__dirname, './src/components'),
-        '@store': resolve(__dirname, './src/store'),
-        '@views': resolve(__dirname, './src/views'),
-        '@assets': resolve(__dirname, './src/assets'),
-        '@hooks': resolve(__dirname, './src/hooks'),
+        '@shared': resolve(__dirname, './src/shared'),
+        '@entities': resolve(__dirname, './src/entities'),
+        '@features': resolve(__dirname, './src/features'),
+        '@widgets': resolve(__dirname, './src/widgets'),
+        '@pages': resolve(__dirname, './src/pages'),
+        '@app': resolve(__dirname, './src/app'),
       },
     },
     server: {
@@ -61,5 +62,5 @@ export default ({ command, mode }: ConfigEnv) => {
       //   },
       // },
     },
-  })
-}
+  });
+};

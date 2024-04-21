@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .icons-default {
+        @apply pointer-events-none text-2xl text-default-400
+    }
+}
