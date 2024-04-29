@@ -1,9 +1,10 @@
 // eslint-disable-next-line import/extensions
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { loginUserMutation } from '@entities/session/session.api.ts';
-import { sessionStore } from '@entities/session/session.model.ts';
-import { TSession } from '@entities/session/session.types.ts';
+import { loginUserMutation } from '@entities/session/session.api';
+import { sessionStore } from '@entities/session/session.model';
+import { TSession } from '@entities/session/session.types';
+import { GenericError } from '@shared/lib/fetch';
 import { queryClient } from '@shared/lib/react-query';
 import { routes } from '@shared/lib/react-router';
 
@@ -43,5 +44,6 @@ export function useLoginUserMutation() {
       userService.setCache(user);
       navigate(routes.profile.root());
     },
+    onError: (error:GenericError<any>) => error,
   });
 }

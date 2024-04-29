@@ -3,7 +3,7 @@ import { AddressDtoSchema } from '@/entities/address';
 
 export const LoginUserDtoSchema = z.object({
   username: z.string().refine(value => (value.length === 8 || value.length === 12) && Number(value), { message: 'Длинна должна быть 8 или 12 цифр' }).transform(Number),
-  password: z.string().min(8, 'Длинна пароля должна быть от 8 символов'),
+  password: z.string(),
 });
 
 export const RegisterUserDtoSchema = z.object({

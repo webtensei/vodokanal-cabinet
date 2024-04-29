@@ -1,23 +1,24 @@
-import { ZodType } from 'zod';
+import { ZodIssue, ZodType } from 'zod';
 
-export function formikContract<D>(data: ZodType<D>) {
-  return <V>(values: V) => {
-    const errors: Record<string, string> = {};
-
-    const parsed = data.safeParse(values);
-
-    if (parsed.success) {
-      return errors;
+export function addServerErrors<T>(
+  errors: ZodIssue[],
+  setError: (
+    fieldName: keyof T,
+    error: ZodIssue
+  ) => void,
+) {
+  return errors.map((issue) => {
+    if (Array.isArray(issue.path)) {
+      for (const p of issue.path) {
+        const path = p as keyof T;
+        setError(path, { ...issue });
+      }
+    } else {
+      const path = issue.path as keyof T;
+      setError(path, { ...issue });
     }
-
-    parsed.error.errors.forEach((e) => {
-      e.path.forEach((path) => {
-        errors[path] = e.message;
-      });
-    });
-
-    return errors;
-  };
+    return null;
+  });
 }
 
 export interface Contract<Raw, Data extends Raw> {

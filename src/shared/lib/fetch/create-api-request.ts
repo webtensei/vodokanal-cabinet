@@ -1,4 +1,4 @@
-import { httpError, networkError, preparationError } from './fetch.errors';
+import { httpError, invalidDataError, networkError, preparationError } from './fetch.errors';
 import { formatUrl, formatHeaders } from './fetch.lib';
 import { HttpMethod, RequestBody, FetchApiRecord } from './fetch.types';
 
@@ -27,15 +27,21 @@ export async function createApiRequest(config: ApiConfig) {
   ).catch((error) => {
     throw networkError({
       reason: error?.message ?? null,
-      cause: error,
+      response: error,
     });
   });
 
   if (!response.ok) {
+    const fullResponse = await response.text().catch(() => null);
+    const parsedResponse = fullResponse ? JSON.parse(fullResponse) : [];
+    if (response.status === 400) {
+      // TODO: ВЕРНУТЬ В JSON МУТАТИОН И В ZOD правильные валидаторы
+      throw invalidDataError({ validationErrors: parsedResponse?.errors || [], response: parsedResponse });
+    }
     throw httpError({
       status: response.status,
       statusText: response.statusText,
-      response: (await response.text().catch(() => null)) ?? null,
+      response: parsedResponse,
     });
   }
 
@@ -44,11 +50,11 @@ export async function createApiRequest(config: ApiConfig) {
   const data = !response.body
     ? null
     : await response.json().catch(async (error) => {
-        throw preparationError({
-          response: await clonedResponse.text(),
-          reason: error?.message ?? null,
-        });
+      throw preparationError({
+        response: await clonedResponse.text(),
+        reason: error?.message ?? null,
       });
+    });
 
   return data;
 }

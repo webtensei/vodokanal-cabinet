@@ -60,12 +60,12 @@ export async function createJsonMutation<
   };
 }) {
   const data = await createApiRequest({ request: config.request });
-
   if (config?.response?.contract && !config.response.contract.isData(data)) {
     throw invalidDataError({
       validationErrors: config.response.contract.getErrorMessages(data),
       response: data,
     });
+
   }
 
   return config?.response?.mapData ? config.response.mapData(data) : data;

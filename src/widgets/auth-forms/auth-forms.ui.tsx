@@ -4,13 +4,16 @@ import { Button, Card, CardBody, CardFooter, Input, Progress } from '@nextui-org
 import { FieldValues, useForm } from 'react-hook-form';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import { sessionContracts, sessionTypes, sessionQueries } from '@entities/session';
+import { INVALID_DATA, HTTP } from '@shared/lib/fetch';
+import { addServerErrors } from '@shared/lib/zod';
 import { cn } from '@shared/ui';
 
 export function LoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
+    setError,
   } = useForm<sessionTypes.TLoginUserDto>({ resolver: zodResolver(sessionContracts.LoginUserDtoSchema) });
 
   const {
@@ -25,14 +28,18 @@ export function LoginForm() {
   function toggleVisibility() {
     return setIsVisiblePassword(isVisiblePassword => !isVisiblePassword);
   }
-  const onSubmit = async (user:sessionTypes.TLoginUserDto) => {
+
+  const onSubmit = async (user: sessionTypes.TLoginUserDto) => {
     console.log(user);
     loginUser({ user });
   };
 
   useEffect(() => {
-    console.log(isPending, error);
-  }, [isPending, isError]);
+    if (error && error?.errorType === INVALID_DATA) addServerErrors(error?.validationErrors, setError);
+    // else (вызываем нотификацию) а нижний иф убираем.
+    if (error && error?.errorType === HTTP && error?.response?.message === 'Unauthorized') setError('password', { message: 'Неверный логин или пароль' });
+    console.log(error);
+  }, [isError]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card>

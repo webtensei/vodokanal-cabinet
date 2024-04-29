@@ -46,7 +46,7 @@ export function httpError(config: {
 
 export function networkError(config: {
   reason: string | null;
-  cause?: unknown;
+  response:string | Json | null;
 }): NetworkError {
   return {
     ...config,

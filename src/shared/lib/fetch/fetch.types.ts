@@ -26,6 +26,7 @@ export type Json =
 
 export type GenericError<T extends string> = {
   errorType: T;
+  response: string | Json | null | unknown;
   explanation: string;
 };
 
@@ -52,5 +53,5 @@ export interface HttpError<Status extends number = number>
 export const NETWORK = 'NETWORK';
 export interface NetworkError extends GenericError<typeof NETWORK> {
   reason: string | null;
-  cause?: unknown;
+  response: string | Json | null;
 }
