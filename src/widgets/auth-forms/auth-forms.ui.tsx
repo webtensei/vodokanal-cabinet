@@ -3,22 +3,21 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Card, CardBody, CardFooter, Input, Progress } from '@nextui-org/react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
+import { toast } from 'react-toastify';
 import { sessionContracts, sessionTypes, sessionQueries } from '@entities/session';
-import { INVALID_DATA, HTTP } from '@shared/lib/fetch';
-import { addServerErrors } from '@shared/lib/zod';
+import { addServerErrors, isErrorWithValidationErrors } from '@shared/lib/zod';
 import { cn } from '@shared/ui';
 
 export function LoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting },
     setError,
   } = useForm<sessionTypes.TLoginUserDto>({ resolver: zodResolver(sessionContracts.LoginUserDtoSchema) });
 
   const {
     mutate: loginUser,
-    isPending,
     isError,
     error,
   } = sessionQueries.useLoginUserMutation();
@@ -30,15 +29,14 @@ export function LoginForm() {
   }
 
   const onSubmit = async (user: sessionTypes.TLoginUserDto) => {
-    console.log(user);
     loginUser({ user });
   };
 
   useEffect(() => {
-    if (error && error?.errorType === INVALID_DATA) addServerErrors(error?.validationErrors, setError);
-    // else (вызываем нотификацию) а нижний иф убираем.
-    if (error && error?.errorType === HTTP && error?.response?.message === 'Unauthorized') setError('password', { message: 'Неверный логин или пароль' });
-    console.log(error);
+    if (error && isErrorWithValidationErrors(error)) addServerErrors(error.validationErrors, setError);
+    else if (error) {
+      toast.error(`${error.response?.message || error.explanation}`);
+    }
   }, [isError]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -199,12 +197,12 @@ const registerTabs = [
       item: 'input', name: 'uname', type: 'string', label: 'Имя', placeholder: 'Введите имя',
     },
     {
-      item: 'input', name: 'surname', type: 'phone', label: 'Фамилия', placeholder: 'Введите фамилию',
+      item: 'input', name: 'surname', type: 'string', label: 'Фамилия', placeholder: 'Введите фамилию',
     },
     {
       item: 'input',
       name: 'patronymic',
-      type: 'email',
+      type: 'string',
       label: 'Отчество ( при наличии )',
       placeholder: 'Введите отчество',
     },

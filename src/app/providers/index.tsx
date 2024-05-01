@@ -4,8 +4,8 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { QueryClientProvider } from '@app/providers/with-query-client';
 import { BrowserRouter } from '@app/providers/with-router';
 import { withSuspense } from '@app/providers/with-suspense';
+import { ToastifyContainerProvider } from '@app/providers/with-toastify';
 import { FullPageError } from '@pages/error';
-
 import '../styles/index.css';
 
 function Providers() {
@@ -16,6 +16,7 @@ function Providers() {
       <NextThemesProvider attribute="class" defaultTheme="dark">
         <QueryClientProvider>
           <BrowserRouter />
+          <ToastifyContainerProvider />
         </QueryClientProvider>
       </NextThemesProvider>
     </NextUIProvider>

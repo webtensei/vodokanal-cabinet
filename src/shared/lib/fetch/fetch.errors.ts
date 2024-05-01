@@ -1,9 +1,9 @@
+import { ZodIssue } from 'zod';
 import {
   InvalidDataError,
   INVALID_DATA,
   PreparationError,
   PREPARATION,
-  Json,
   HttpError,
   HTTP,
   NetworkError,
@@ -11,46 +11,46 @@ import {
 } from './fetch.types';
 
 export function invalidDataError(config: {
-  validationErrors: string[];
-  response: unknown;
+  validationErrors: ZodIssue[];
+  response: { message: string };
 }): InvalidDataError {
   return {
     ...config,
     errorType: INVALID_DATA,
-    explanation: 'Response was considered as invalid against a given contract',
+    explanation: 'Ответ был признан недействительным в отношении данного контракта',
   };
 }
 
 export function preparationError(config: {
-  response: string;
+  response: { message: string };
   reason: string | null;
 }): PreparationError {
   return {
     ...config,
     errorType: PREPARATION,
-    explanation: 'Extraction of data from the response was failed',
+    explanation: 'Не удалось извлечь данные из ответа',
   };
 }
 
 export function httpError(config: {
   status: number;
   statusText: string;
-  response: string | Json | null;
+  response: { message: string };
 }): HttpError {
   return {
     ...config,
     errorType: HTTP,
-    explanation: 'Request was finished with unsuccessful HTTP code',
+    explanation: 'Запрос завершен с неудачным HTTP-кодом',
   };
 }
 
 export function networkError(config: {
   reason: string | null;
-  response:string | Json | null;
+  response: { message: string };
 }): NetworkError {
   return {
     ...config,
     errorType: NETWORK,
-    explanation: 'Request was failed due to network problems',
+    explanation: 'Запрос не выполнен из-за проблем с сетью',
   };
 }

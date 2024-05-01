@@ -51,7 +51,8 @@ export async function createApiRequest(config: ApiConfig) {
     ? null
     : await response.json().catch(async (error) => {
       throw preparationError({
-        response: await clonedResponse.text(),
+        // мб тут будет баг и надо сначала .text парсить
+        response: await clonedResponse.json(),
         reason: error?.message ?? null,
       });
     });

@@ -1,4 +1,5 @@
 import { ZodIssue, ZodType } from 'zod';
+import { INVALID_DATA, InvalidDataError } from '@shared/lib/fetch';
 
 export function addServerErrors<T>(
   errors: ZodIssue[],
@@ -20,10 +21,12 @@ export function addServerErrors<T>(
     return null;
   });
 }
-
+export function isErrorWithValidationErrors(error: any): error is InvalidDataError {
+  return error?.errorType === INVALID_DATA;
+}
 export interface Contract<Raw, Data extends Raw> {
   isData: (prepared: Raw) => prepared is Data;
-  getErrorMessages: (prepared: Raw) => string[];
+  getErrorMessages: (prepared: Raw) => ZodIssue[];
 }
 
 export function zodContract<D>(data: ZodType<D>): Contract<unknown, D> {
@@ -33,16 +36,13 @@ export function zodContract<D>(data: ZodType<D>): Contract<unknown, D> {
 
   return {
     isData,
-    getErrorMessages(raw) {
+    getErrorMessages(raw): ZodIssue[] {
       const validation = data.safeParse(raw);
       if (validation.success) {
         return [];
       }
 
-      return validation.error.errors.map((e) => {
-        const path = e.path.join('.');
-        return path !== '' ? `${e.message}, path: ${path}` : e.message;
-      });
+      return validation.error.errors;
     },
   };
 }
