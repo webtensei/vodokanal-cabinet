@@ -9,7 +9,6 @@ enum IAuthAction {
   login = 'login',
   register = 'register',
 }
-
 export function AuthPage() {
   const [selected, setSelected] = useState<IAuthAction>();
   // Прошу подметить одну нетривиальную вещь, редирект со страницы /auth/ произойдет на /auth/login/ автоматически

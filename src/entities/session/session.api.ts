@@ -9,7 +9,7 @@ export async function loginUserMutation(params: { user: TLoginUserDto }) {
     request: {
       url: `${import.meta.env.VITE_API_SERVER_URL}/auth/login`,
       method: 'POST',
-      body: JSON.stringify({  ...params.user }),
+      body: JSON.stringify({ ...params.user }),
     },
     response: {
       contract: zodContract(LoginResponse),

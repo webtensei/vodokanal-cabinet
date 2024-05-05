@@ -10,6 +10,7 @@ type Token = string;
 
 type State = {
   token: Token | null;
+  username:  number | null;
 };
 
 type Actions = {
@@ -25,6 +26,7 @@ const createSessionSlice: StateCreator<
   SessionState
 > = (set) => ({
   token: null,
+  username:null,
   updateToken: (token: Token | null) =>
     set({ token: token || null }, false, 'updateToken'),
 });

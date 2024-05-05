@@ -1,6 +1,6 @@
-import { TLoginResponse } from './session.types';
+import { TSession } from './session.types';
 
-export function mapUser(userDto: TLoginResponse): TLoginResponse {
+export function mapUser(userDto: TSession): TSession {
   return {
     ...userDto,
   };

@@ -10,6 +10,7 @@ export function addServerErrors<T>(
 ) {
   return errors.map((issue) => {
     if (Array.isArray(issue.path)) {
+      // eslint-disable-next-line no-restricted-syntax
       for (const p of issue.path) {
         const path = p as keyof T;
         setError(path, { ...issue });

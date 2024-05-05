@@ -32,5 +32,3 @@ export const LoginResponse = z.object({
     user_agent: z.string(),
   }),
 });
-
-
