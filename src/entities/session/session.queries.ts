@@ -6,7 +6,6 @@ import { sessionStore } from '@entities/session/session.model';
 import { GenericError } from '@shared/lib/fetch';
 import { routes } from '@shared/lib/react-router';
 
-
 const keys = {
   root: () => ['session'],
   login: () => [...keys.root(), 'login'] as const,
@@ -21,9 +20,9 @@ export function useLoginUserMutation() {
     mutationKey: keys.login(),
     mutationFn: loginUserMutation,
     onSuccess: async (user) => {
-      sessionStore.setState({ token: user.accessToken, username:user.refreshToken.username });
+      sessionStore.setState({ token: user.accessToken, username: user.refreshToken.username });
       navigate(routes.profile.root());
     },
-    onError: (error:GenericError<any>) => error,
+    onError: (error: GenericError<any>) => error,
   });
 }

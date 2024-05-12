@@ -1,13 +1,7 @@
 import { ZodIssue, ZodType } from 'zod';
 import { INVALID_DATA, InvalidDataError } from '@shared/lib/fetch';
 
-export function addServerErrors<T>(
-  errors: ZodIssue[],
-  setError: (
-    fieldName: keyof T,
-    error: ZodIssue
-  ) => void,
-) {
+export function addServerErrors<T>(errors: ZodIssue[], setError: (fieldName: keyof T, error: ZodIssue) => void) {
   return errors.map((issue) => {
     if (Array.isArray(issue.path)) {
       // eslint-disable-next-line no-restricted-syntax

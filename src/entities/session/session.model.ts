@@ -1,16 +1,11 @@
 import { StateCreator, createStore } from 'zustand';
-import {
-  DevtoolsOptions,
-  PersistOptions,
-  devtools,
-  persist,
-} from 'zustand/middleware';
+import { DevtoolsOptions, PersistOptions, devtools, persist } from 'zustand/middleware';
 
 type Token = string;
 
 type State = {
   token: Token | null;
-  username:  number | null;
+  username: number | null;
 };
 
 type Actions = {
@@ -26,9 +21,8 @@ const createSessionSlice: StateCreator<
   SessionState
 > = (set) => ({
   token: null,
-  username:null,
-  updateToken: (token: Token | null) =>
-    set({ token: token || null }, false, 'updateToken'),
+  username: null,
+  updateToken: (token: Token | null) => set({ token: token || null }, false, 'updateToken'),
 });
 
 const persistOptions: PersistOptions<SessionState> = { name: 'session' };

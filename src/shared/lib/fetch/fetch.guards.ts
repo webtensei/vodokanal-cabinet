@@ -10,15 +10,11 @@ import {
   NETWORK,
 } from './fetch.types';
 
-export function isInvalidDataError(
-  error: GenericError<any>,
-): error is InvalidDataError {
+export function isInvalidDataError(error: GenericError<any>): error is InvalidDataError {
   return error?.errorType === INVALID_DATA;
 }
 
-export function isPreparationError(
-  error: GenericError<any>,
-): error is PreparationError {
+export function isPreparationError(error: GenericError<any>): error is PreparationError {
   return error?.errorType === PREPARATION;
 }
 
@@ -27,9 +23,7 @@ export function isHttpError(error: GenericError<any>): error is HttpError {
 }
 
 export function isHttpErrorCode<Code extends number>(code: Code | Code[]) {
-  return function isExactHttpError(
-    error: GenericError<any>,
-  ): error is HttpError<Code> {
+  return function isExactHttpError(error: GenericError<any>): error is HttpError<Code> {
     if (!isHttpError(error)) {
       return false;
     }
@@ -40,8 +34,6 @@ export function isHttpErrorCode<Code extends number>(code: Code | Code[]) {
   };
 }
 
-export function isNetworkError(
-  error: GenericError<any>,
-): error is NetworkError {
+export function isNetworkError(error: GenericError<any>): error is NetworkError {
   return error?.errorType === NETWORK;
 }

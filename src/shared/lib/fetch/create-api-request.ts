@@ -16,15 +16,12 @@ interface ApiConfig {
 }
 
 export async function createApiRequest(config: ApiConfig) {
-  const response = await fetch(
-    formatUrl({ href: config.request.url, query: config.request.query || {} }),
-    {
-      method: config.request.method,
-      headers: formatHeaders(config.request.headers || {}),
-      body: config.request.body,
-      signal: config?.abort,
-    },
-  ).catch((error) => {
+  const response = await fetch(formatUrl({ href: config.request.url, query: config.request.query || {} }), {
+    method: config.request.method,
+    headers: formatHeaders(config.request.headers || {}),
+    body: config.request.body,
+    signal: config?.abort,
+  }).catch((error) => {
     throw networkError({
       reason: error?.message ?? null,
       response: error,
@@ -50,12 +47,12 @@ export async function createApiRequest(config: ApiConfig) {
   const data = !response.body
     ? null
     : await response.json().catch(async (error) => {
-      throw preparationError({
-        // мб тут будет баг и надо сначала .text парсить
-        response: await clonedResponse.json(),
-        reason: error?.message ?? null,
+        throw preparationError({
+          // мб тут будет баг и надо сначала .text парсить
+          response: await clonedResponse.json(),
+          reason: error?.message ?? null,
+        });
       });
-    });
 
   return data;
 }

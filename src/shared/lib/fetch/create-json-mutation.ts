@@ -11,11 +11,7 @@ interface JsonMutationConfig {
   body?: RequestBody;
 }
 
-export async function createJsonMutation<
-  Response,
-  ContractData extends Response,
-  MappedData,
->(config: {
+export async function createJsonMutation<Response, ContractData extends Response, MappedData>(config: {
   request: JsonMutationConfig;
   response: {
     contract: Contract<Response, ContractData>;
@@ -23,36 +19,23 @@ export async function createJsonMutation<
   };
 }): Promise<MappedData>;
 
-export async function createJsonMutation<
-  Response,
-  ContractData extends Response,
->(config: {
+export async function createJsonMutation<Response, ContractData extends Response>(config: {
   request: JsonMutationConfig;
   response: {
     contract: Contract<Response, ContractData>;
   };
 }): Promise<ContractData>;
 
-export async function createJsonMutation<
-  Response,
-  ContractData extends Response,
-  MappedData,
->(config: {
+export async function createJsonMutation<Response, ContractData extends Response, MappedData>(config: {
   request: JsonMutationConfig;
   response: {
     mapData: (data: ContractData) => MappedData;
   };
 }): Promise<MappedData>;
 
-export async function createJsonMutation(config: {
-  request: JsonMutationConfig;
-}): Promise<unknown>;
+export async function createJsonMutation(config: { request: JsonMutationConfig }): Promise<unknown>;
 
-export async function createJsonMutation<
-  Response,
-  ContractData extends Response,
-  MappedData,
->(config: {
+export async function createJsonMutation<Response, ContractData extends Response, MappedData>(config: {
   request: JsonMutationConfig;
   response?: {
     contract?: Contract<Response, ContractData>;
@@ -65,7 +48,6 @@ export async function createJsonMutation<
       validationErrors: config.response.contract.getErrorMessages(data),
       response: data,
     });
-
   }
 
   return config?.response?.mapData ? config.response.mapData(data) : data;

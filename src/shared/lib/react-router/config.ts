@@ -20,7 +20,7 @@ export const routes = {
       return routes.auth.root().concat('verify/');
     },
   },
-  profile:{
+  profile: {
     root() {
       return routes.root.concat('profile/');
     },

@@ -27,9 +27,7 @@ export function formatHeaders(headersRecord: FetchApiRecord): Headers {
   return headers;
 }
 
-export function recordToUrlSearchParams(
-  record: FetchApiRecord,
-): URLSearchParams {
+export function recordToUrlSearchParams(record: FetchApiRecord): URLSearchParams {
   const params = new URLSearchParams();
 
   Object.entries(record).forEach(([key, value]) => {
@@ -44,9 +42,7 @@ export function recordToUrlSearchParams(
   return params;
 }
 
-export function clearValue(
-  value: string | string[] | number | boolean | null | undefined,
-): string | string[] | null {
+export function clearValue(value: string | string[] | number | boolean | null | undefined): string | string[] | null {
   if (typeof value === 'number' || typeof value === 'boolean') {
     return value.toString();
   }

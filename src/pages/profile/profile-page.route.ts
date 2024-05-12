@@ -6,6 +6,5 @@ import { ProfilePage } from './profile-page.ui';
 export const ProfilePageRoute: RouteObject = {
   path: `${routes.profile.root()}`,
   element: createElement(ProfilePage),
-  children: [
-  ],
+  children: [],
 };

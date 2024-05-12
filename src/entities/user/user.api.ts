@@ -1,5 +1,5 @@
 import { authorizationHeader } from '@entities/session/session.model';
-import { createApiRequest } from '@shared/lib/fetch/create-api-request';
+import { createApiRequest } from '@shared/lib/fetch/';
 
 export async function fetchCurrentUser(params: { username: number }) {
   return createApiRequest({

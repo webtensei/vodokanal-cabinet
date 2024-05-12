@@ -1,8 +1,6 @@
 import { RouterProvider, createBrowserRouter, useRouteError } from 'react-router-dom';
 import { AuthPageRoute } from '@/pages/auth';
-import { HomePageRoute } from '@/pages/home';
 import { GeneralLayout, GuestLayout } from '@/pages/layouts';
-import { NehomePageRoute } from '@/pages/nehome';
 import { ProfilePageRoute } from '@pages/profile';
 
 // https://github.com/remix-run/react-router/discussions/10166
@@ -18,17 +16,11 @@ const router = createBrowserRouter([
     children: [
       {
         element: <GuestLayout />,
-        children:[
-          NehomePageRoute,
-          AuthPageRoute,
-        ],
+        children: [AuthPageRoute],
       },
       {
         element: <GeneralLayout />,
-        children:[
-          HomePageRoute,
-          ProfilePageRoute,
-        ],
+        children: [ProfilePageRoute],
       },
     ],
   },

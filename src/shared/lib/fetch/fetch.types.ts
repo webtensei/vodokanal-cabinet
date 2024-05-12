@@ -1,34 +1,16 @@
 import { ZodIssue } from 'zod';
 
-export type HttpMethod =
-  | 'HEAD'
-  | 'GET'
-  | 'POST'
-  | 'PUT'
-  | 'PATCH'
-  | 'DELETE'
-  | 'QUERY'
-  | 'OPTIONS';
+export type HttpMethod = 'HEAD' | 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'QUERY' | 'OPTIONS';
 
 export type RequestBody = Blob | BufferSource | FormData | string;
 
-export type FetchApiRecord = Record<
-  string,
-  string | string[] | number | boolean | null | undefined
->;
+export type FetchApiRecord = Record<string, string | string[] | number | boolean | null | undefined>;
 
-export type Json =
-  | null
-  | undefined
-  | boolean
-  | string
-  | number
-  | Json[]
-  | { [k: string]: Json };
+export type Json = null | undefined | boolean | string | number | Json[] | { [k: string]: Json };
 
 export type GenericError<T extends string> = {
   errorType: T;
-  response: { message:string };
+  response: { message: string };
   explanation: string;
 };
 
@@ -43,8 +25,7 @@ export interface PreparationError extends GenericError<typeof PREPARATION> {
 }
 
 export const HTTP = 'HTTP';
-export interface HttpError<Status extends number = number>
-  extends GenericError<typeof HTTP> {
+export interface HttpError<Status extends number = number> extends GenericError<typeof HTTP> {
   status: Status;
   statusText: string;
 }

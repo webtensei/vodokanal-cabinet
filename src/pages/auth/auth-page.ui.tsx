@@ -4,7 +4,6 @@ import { useLocation, useNavigate, Link as RLink } from 'react-router-dom';
 import { routes } from '@/shared/lib/react-router';
 import { LoginForm, RegisterForm } from '@/widgets/auth-forms';
 
-
 enum IAuthAction {
   login = 'login',
   register = 'register',
@@ -16,36 +15,35 @@ export function AuthPage() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  function handleTabChange(key:IAuthAction) {
+  function handleTabChange(key: IAuthAction) {
     setSelected(key);
     return navigate(routes.auth[key]());
   }
 
   useEffect(() => {
     if (pathname === routes.auth.register()) handleTabChange(IAuthAction.register);
-  }, [pathname]);
+  }, [pathname, handleTabChange]);
 
   return (
-    <div className="flex justify-center items-center min-h-[100vh]">
-      <div className="max-w-full w-[340px] h-96 ">
+    <div className="flex min-h-[100vh] items-center justify-center">
+      <div className="h-96 w-[340px] max-w-full ">
         <Tabs
           fullWidth
           aria-label="Выбор авторизации"
           selectedKey={selected}
           onSelectionChange={(key) => handleTabChange(key as IAuthAction)}
         >
-
           <Tab key={IAuthAction.login} title="Войти">
-            <LoginForm/>
+            <LoginForm />
             <p className="mt-4 text-center text-small">
               Не зарегистрированы?{' '}
-              <Link size="sm" as={RLink} to={routes.auth.register()}  className="cursor-pointer">
+              <Link size="sm" as={RLink} to={routes.auth.register()} className="cursor-pointer">
                 Регистрация
               </Link>
             </p>
           </Tab>
           <Tab key={IAuthAction.register} title="Зарегестрироваться">
-            <RegisterForm/>
+            <RegisterForm />
           </Tab>
         </Tabs>
       </div>

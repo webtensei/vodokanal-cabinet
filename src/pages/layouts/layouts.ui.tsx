@@ -7,40 +7,32 @@ import { userService } from '@entities/user/user.queries';
 import { routes } from '@shared/lib/react-router';
 
 export function GuestLayout() {
-  return (
-    <Outlet />
-  );
+  return <Outlet />;
 }
 
 export function GeneralLayout() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const {
-    mutate: getUser,
-    error,
-    isSuccess,
-    isError,
-  } = userQueries.useFetchCurrentUserMutation();
-
+  const { mutate: getUser, error, isSuccess } = userQueries.useFetchCurrentUserMutation();
+  const user = userService.getCache();
 
   useEffect(() => {
     if (!hasToken()) return navigate(routes.auth.login());
     const { username } = sessionStore.getState();
-    if (username) getUser({ username:username ?? null });
-  }, []);
+    if (username) getUser({ username: username ?? null });
+  }, [getUser, navigate]);
 
   useEffect(() => {
     if (isSuccess) setIsLoading(false);
-    if (isError) toast.error(error.response.message || 'Неизвестная ошибка');
-  }, [isSuccess, isError]);
+    if (error) toast.error(error.response.message || 'Неизвестная ошибка');
+  }, [isSuccess, error]);
 
   if (isLoading) return <div>загрузка</div>;
-  if (isSuccess && !isLoading) {
-      const user = userService.getCache();
-    if (user && (!user.contacts.email_activated || !user.contacts.phone_activated)) {
-      navigate('pepe');
-    }
+
+  if (user && (!user.contacts.email_activated || !user.contacts.phone_activated)) {
+    navigate('verify');
   }
+
   return (
     <div>
       s

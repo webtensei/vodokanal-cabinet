@@ -7,7 +7,6 @@ export enum UserRoles {
   OWNER = 'OWNER',
 }
 
-
 export const UserResponse = z.object({
   name: z.string(),
   patronymic: z.string().nullish(),

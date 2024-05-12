@@ -9,7 +9,7 @@ import { FullPageError } from '@pages/error';
 import '../styles/index.css';
 
 function Providers() {
-// TODO: удалить некст темы
+  // TODO: удалить некст темы
 
   return (
     <NextUIProvider>

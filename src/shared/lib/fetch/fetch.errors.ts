@@ -21,10 +21,7 @@ export function invalidDataError(config: {
   };
 }
 
-export function preparationError(config: {
-  response: { message: string };
-  reason: string | null;
-}): PreparationError {
+export function preparationError(config: { response: { message: string }; reason: string | null }): PreparationError {
   return {
     ...config,
     errorType: PREPARATION,
@@ -32,11 +29,7 @@ export function preparationError(config: {
   };
 }
 
-export function httpError(config: {
-  status: number;
-  statusText: string;
-  response: { message: string };
-}): HttpError {
+export function httpError(config: { status: number; statusText: string; response: { message: string } }): HttpError {
   return {
     ...config,
     errorType: HTTP,
@@ -44,10 +37,7 @@ export function httpError(config: {
   };
 }
 
-export function networkError(config: {
-  reason: string | null;
-  response: { message: string };
-}): NetworkError {
+export function networkError(config: { reason: string | null; response: { message: string } }): NetworkError {
   return {
     ...config,
     errorType: NETWORK,

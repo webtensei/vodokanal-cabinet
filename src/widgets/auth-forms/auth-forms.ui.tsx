@@ -16,16 +16,12 @@ export function LoginForm() {
     setError,
   } = useForm<sessionTypes.TLoginUserDto>({ resolver: zodResolver(sessionContracts.LoginUserDtoSchema) });
 
-  const {
-    mutate: loginUser,
-    isError,
-    error,
-  } = sessionQueries.useLoginUserMutation();
+  const { mutate: loginUser, error } = sessionQueries.useLoginUserMutation();
 
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
 
   function toggleVisibility() {
-    return setIsVisiblePassword(isVisiblePassword => !isVisiblePassword);
+    return setIsVisiblePassword((isVisiblePassword) => !isVisiblePassword);
   }
 
   const onSubmit = async (user: sessionTypes.TLoginUserDto) => {
@@ -37,7 +33,7 @@ export function LoginForm() {
     else if (error) {
       toast.error(`${error.response?.message || error.explanation}`);
     }
-  }, [isError]);
+  }, [setError, error]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card>
@@ -58,19 +54,11 @@ export function LoginForm() {
             label="Пароль"
             placeholder="Введите пароль"
             endContent={
-              <button
-                className="focus:outline-none"
-                type="button"
-                onClick={toggleVisibility}
-              >
-                {isVisiblePassword
-                  ? <IoMdEyeOff className="icons-default" />
-                  : <IoMdEye className="icons-default" />
-                }
+              <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                {isVisiblePassword ? <IoMdEyeOff className="icons-default" /> : <IoMdEye className="icons-default" />}
               </button>
             }
           />
-
         </CardBody>
         <CardFooter>
           <Button
@@ -86,7 +74,6 @@ export function LoginForm() {
         </CardFooter>
       </Card>
     </form>
-
   );
 }
 
@@ -101,7 +88,9 @@ export function RegisterForm() {
   const [step, setStep] = useState(0);
   const handleNextStep = async () => {
     if (step === registerTabs.length - 1) return;
-    const validationTabResult = await Promise.all(registerTabs[step].map((tab) => trigger(tab.name as keyof sessionTypes.TRegisterUserDto)));
+    const validationTabResult = await Promise.all(
+      registerTabs[step].map((tab) => trigger(tab.name as keyof sessionTypes.TRegisterUserDto)),
+    );
     if (validationTabResult.includes(false)) return;
     return setStep(step + 1);
   };
@@ -123,23 +112,26 @@ export function RegisterForm() {
         <CardBody>
           <Progress size="md" className="pb-4" value={step * 34} aria-label="Прогресс" />
           {registerTabs.map((tab, index) => (
-            <div
-              className={cn('flex flex-col gap-4', step !== index && 'hidden')}
-            >
+            <div className={cn('flex flex-col gap-4', step !== index && 'hidden')}>
               {tab.map((slot) => {
                 if (slot.item === 'component') return slot.component;
-                if (slot.item === 'input') return <Input
-                  key={slot.name}
-                  {...register(slot.name as keyof sessionTypes.TRegisterUserDto)}
-                  isRequired={!!errors[slot.name as keyof sessionTypes.TRegisterUserDto]}
-                  errorMessage={errors[slot.name as keyof sessionTypes.TRegisterUserDto] && String(errors[slot.name as keyof sessionTypes.TRegisterUserDto]?.message)}
-                  type={slot.type}
-                  label={slot.label}
-                  placeholder={slot.placeholder}
-                />;
+                if (slot.item === 'input')
+                  return (
+                    <Input
+                      key={slot.name}
+                      {...register(slot.name as keyof sessionTypes.TRegisterUserDto)}
+                      isRequired={!!errors[slot.name as keyof sessionTypes.TRegisterUserDto]}
+                      errorMessage={
+                        errors[slot.name as keyof sessionTypes.TRegisterUserDto] &&
+                        String(errors[slot.name as keyof sessionTypes.TRegisterUserDto]?.message)
+                      }
+                      type={slot.type}
+                      label={slot.label}
+                      placeholder={slot.placeholder}
+                    />
+                  );
                 return null;
               })}
-
             </div>
           ))}
         </CardBody>
@@ -153,12 +145,7 @@ export function RegisterForm() {
             Назад
           </Button>
           <div className={cn(step === registerTabs.length - 1 && 'hidden')}>
-            <Button
-              variant="bordered"
-              color="primary"
-              type="button"
-              onPress={handleNextStep}
-            >
+            <Button variant="bordered" color="primary" type="button" onPress={handleNextStep}>
               Далее
             </Button>
           </div>
@@ -183,21 +170,41 @@ export function RegisterForm() {
 const registerTabs = [
   [
     {
-      item: 'input', name: 'username', type: 'string', label: 'Логин', placeholder: 'Введите ИНН/Лицевой счет',
+      item: 'input',
+      name: 'username',
+      type: 'string',
+      label: 'Логин',
+      placeholder: 'Введите ИНН/Лицевой счет',
     },
     {
-      item: 'input', name: 'phone', type: 'phone', label: 'Телефон', placeholder: 'Введите телефон',
+      item: 'input',
+      name: 'phone',
+      type: 'phone',
+      label: 'Телефон',
+      placeholder: 'Введите телефон',
     },
     {
-      item: 'input', name: 'email', type: 'email', label: 'Почта', placeholder: 'Введите почту',
+      item: 'input',
+      name: 'email',
+      type: 'email',
+      label: 'Почта',
+      placeholder: 'Введите почту',
     },
   ],
   [
     {
-      item: 'input', name: 'uname', type: 'string', label: 'Имя', placeholder: 'Введите имя',
+      item: 'input',
+      name: 'uname',
+      type: 'string',
+      label: 'Имя',
+      placeholder: 'Введите имя',
     },
     {
-      item: 'input', name: 'surname', type: 'string', label: 'Фамилия', placeholder: 'Введите фамилию',
+      item: 'input',
+      name: 'surname',
+      type: 'string',
+      label: 'Фамилия',
+      placeholder: 'Введите фамилию',
     },
     {
       item: 'input',
@@ -209,10 +216,15 @@ const registerTabs = [
   ],
   [
     {
-      item: 'component', component: <Input label="Он вставлен в маппинге" placeholder="Кастомный компонент" />,
+      item: 'component',
+      component: <Input label="Он вставлен в маппинге" placeholder="Кастомный компонент" />,
     },
     {
-      item: 'input', name: 'password', type: 'password', label: 'Пароль', placeholder: 'Введите пароль',
+      item: 'input',
+      name: 'password',
+      type: 'password',
+      label: 'Пароль',
+      placeholder: 'Введите пароль',
     },
     {
       item: 'input',

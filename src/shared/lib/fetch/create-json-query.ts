@@ -10,11 +10,7 @@ interface JsonQueryConfig {
   query?: FetchApiRecord;
 }
 
-export async function createJsonQuery<
-  Response,
-  ContractData extends Response,
-  MappedData,
->(config: {
+export async function createJsonQuery<Response, ContractData extends Response, MappedData>(config: {
   request: JsonQueryConfig;
   response: {
     contract: Contract<Response, ContractData>;
@@ -23,10 +19,7 @@ export async function createJsonQuery<
   abort?: AbortSignal;
 }): Promise<MappedData>;
 
-export async function createJsonQuery<
-  Response,
-  ContractData extends Response,
->(config: {
+export async function createJsonQuery<Response, ContractData extends Response>(config: {
   request: JsonQueryConfig;
   response: {
     contract: Contract<Response, ContractData>;
@@ -34,11 +27,7 @@ export async function createJsonQuery<
   abort?: AbortSignal;
 }): Promise<ContractData>;
 
-export async function createJsonQuery<
-  Response,
-  ContractData extends Response,
-  MappedData,
->(config: {
+export async function createJsonQuery<Response, ContractData extends Response, MappedData>(config: {
   request: JsonQueryConfig;
   response: {
     mapData: (data: ContractData) => MappedData;
@@ -46,16 +35,9 @@ export async function createJsonQuery<
   abort?: AbortSignal;
 }): Promise<MappedData>;
 
-export async function createJsonQuery(config: {
-  request: JsonQueryConfig;
-  abort?: AbortSignal;
-}): Promise<unknown>;
+export async function createJsonQuery(config: { request: JsonQueryConfig; abort?: AbortSignal }): Promise<unknown>;
 
-export async function createJsonQuery<
-  Response,
-  ContractData extends Response,
-  MappedData,
->(config: {
+export async function createJsonQuery<Response, ContractData extends Response, MappedData>(config: {
   request: JsonQueryConfig;
   response?: {
     contract?: Contract<Response, ContractData>;
