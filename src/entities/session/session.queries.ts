@@ -20,7 +20,7 @@ export function useLoginUserMutation() {
     mutationKey: keys.login(),
     mutationFn: loginUserMutation,
     onSuccess: async (user) => {
-      sessionStore.setState({ token: user.accessToken, username: user.refreshToken.username });
+      sessionStore.setState({ token: user.accessToken });
       navigate(routes.profile.root());
     },
     onError: (error: GenericError<any>) => error,

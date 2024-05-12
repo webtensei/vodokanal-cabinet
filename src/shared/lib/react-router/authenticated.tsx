@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { hasToken, sessionStore } from '@entities/session/session.model';
+import { hasToken, tokenPayload } from '@entities/session/session.model';
 import { userQueries } from '@entities/user';
 import { userService } from '@entities/user/user.queries';
 import { routes } from '@shared/lib/react-router/';
@@ -15,8 +15,7 @@ export function Authenticated({ children }:{ children: ReactNode }) {
 
   useEffect(() => {
     if (!hasToken()) return navigate(routes.auth.login());
-    const { username } = sessionStore.getState();
-    if (username) getUser({ username: username ?? null });
+    if (hasToken()) getUser({ username: tokenPayload().username });
   }, [getUser, navigate]);
 
   useEffect(() => {

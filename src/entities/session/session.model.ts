@@ -1,3 +1,4 @@
+import { jwtDecode } from 'jwt-decode';
 import { StateCreator, createStore } from 'zustand';
 import { DevtoolsOptions, PersistOptions, devtools, persist } from 'zustand/middleware';
 
@@ -5,7 +6,6 @@ type Token = string;
 
 type State = {
   token: Token | null;
-  username: number | null;
 };
 
 type Actions = {
@@ -21,7 +21,6 @@ const createSessionSlice: StateCreator<
   SessionState
 > = (set) => ({
   token: null,
-  username: null,
   updateToken: (token: Token | null) => set({ token: token || null }, false, 'updateToken'),
 });
 
@@ -33,6 +32,8 @@ export const sessionStore = createStore<SessionState>()(
 );
 
 export const hasToken = () => Boolean(sessionStore.getState().token);
+
+export const tokenPayload = ():{ username:number, role:string } => jwtDecode(sessionStore.getState().token ?? '');
 
 export function authorizationHeader() {
   if (hasToken()) {

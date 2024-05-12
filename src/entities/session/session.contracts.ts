@@ -31,11 +31,4 @@ export const RegisterUserDtoSchema = z
 
 export const LoginResponse = z.object({
   accessToken: z.string(),
-  refreshToken: z.object({
-    id: z.string(),
-    token: z.string(),
-    expired_in: z.string(),
-    username: z.number(),
-    user_agent: z.string(),
-  }),
 });

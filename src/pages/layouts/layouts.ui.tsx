@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { Authenticated } from '@shared/lib/react-router/authenticated';
+import { Authenticated } from '@shared/lib/react-router/';
 
 export function GuestLayout() {
   return <Outlet />;
