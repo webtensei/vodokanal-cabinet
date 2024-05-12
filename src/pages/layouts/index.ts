@@ -1,1 +1,1 @@
-export { GeneralLayout, GuestLayout } from './layouts.ui';
+export { AuthenticatedLayout, UserLayout, GuestLayout } from './layouts.ui';

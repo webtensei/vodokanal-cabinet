@@ -1,7 +1,8 @@
 import { RouterProvider, createBrowserRouter, useRouteError } from 'react-router-dom';
 import { AuthPageRoute } from '@/pages/auth';
-import { GeneralLayout, GuestLayout } from '@/pages/layouts';
+import { AuthenticatedLayout, GuestLayout, UserLayout } from '@/pages/layouts';
 import { ProfilePageRoute } from '@pages/profile';
+import { VerifyPageRoute } from '@pages/verify';
 
 // https://github.com/remix-run/react-router/discussions/10166
 function BubbleError() {
@@ -19,8 +20,12 @@ const router = createBrowserRouter([
         children: [AuthPageRoute],
       },
       {
-        element: <GeneralLayout />,
+        element: <UserLayout />,
         children: [ProfilePageRoute],
+      },
+      {
+        element: <AuthenticatedLayout />,
+        children: [VerifyPageRoute],
       },
     ],
   },

@@ -6,5 +6,4 @@ import { VerufyPage } from './verify-page.ui';
 export const VerifyPageRoute: RouteObject = {
   path: `${routes.auth.verify()}`,
   element: createElement(VerufyPage),
-  children: [],
 };

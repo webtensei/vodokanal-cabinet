@@ -3,6 +3,7 @@ import { Tab, Tabs, Link } from '@nextui-org/react';
 import { useLocation, useNavigate, Link as RLink } from 'react-router-dom';
 import { routes } from '@/shared/lib/react-router';
 import { LoginForm, RegisterForm } from '@/widgets/auth-forms';
+import { hasToken } from '@entities/session/session.model';
 
 enum IAuthAction {
   login = 'login',
@@ -23,6 +24,9 @@ export function AuthPage() {
   useEffect(() => {
     if (pathname === routes.auth.register()) handleTabChange(IAuthAction.register);
   }, [pathname, handleTabChange]);
+  useEffect(() => {
+    if (hasToken()) return navigate(routes.profile.root());
+  }, []);
 
   return (
     <div className="flex min-h-[100vh] items-center justify-center">
