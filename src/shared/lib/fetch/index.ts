@@ -1,4 +1,4 @@
-export { createApiRequest } from './create-api-request';
+export { createApiRequest, createApiRequestWithRefresh } from './create-api-request';
 export { createJsonMutation } from './create-json-mutation';
 export { createJsonQuery } from './create-json-query';
 export * from './fetch.errors';

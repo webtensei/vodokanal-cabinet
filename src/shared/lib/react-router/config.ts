@@ -25,4 +25,19 @@ export const routes = {
       return routes.root.concat('profile/');
     },
   },
+  payments:{
+    root() {
+      return routes.root.concat('payments/');
+    },
+  },
+  meters:{
+    root() {
+      return routes.root.concat('meters/');
+    },
+  },
+  indications:{
+    root() {
+      return routes.root.concat('indications/');
+    },
+  },
 };

@@ -33,7 +33,7 @@ export const sessionStore = createStore<SessionState>()(
 
 export const hasToken = () => Boolean(sessionStore.getState().token);
 
-export const tokenPayload = ():{ username:number, role:string } => jwtDecode(sessionStore.getState().token ?? '');
+export const tokenPayload = (): { username: number; role: string } => jwtDecode(sessionStore.getState().token ?? '');
 
 export function authorizationHeader() {
   if (hasToken()) {

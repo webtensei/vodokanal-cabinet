@@ -1,7 +1,7 @@
 import { LoginResponse } from '@entities/session/session.contracts';
 import { mapUser } from '@entities/session/session.lib';
 import { TLoginUserDto } from '@entities/session/session.types';
-import { createJsonMutation } from '@shared/lib/fetch';
+import { createApiRequestWithRefresh, createJsonMutation } from '@shared/lib/fetch';
 import { zodContract } from '@shared/lib/zod';
 
 export async function loginUserMutation(params: { user: TLoginUserDto }) {
@@ -14,6 +14,15 @@ export async function loginUserMutation(params: { user: TLoginUserDto }) {
     response: {
       contract: zodContract(LoginResponse),
       mapData: mapUser,
+    },
+  });
+}
+
+export async function logoutUserMutation() {
+  return createApiRequestWithRefresh({
+    request: {
+      url: `${import.meta.env.VITE_API_SERVER_URL}/auth/logout`,
+      method: 'GET',
     },
   });
 }

@@ -6,7 +6,7 @@ export function ProfilePage() {
   const user = userService.getCache();
 
   return (
-    <div>
+    <div className='truncate'>
       страничка профиля
       {JSON.stringify(data)}
       <br />

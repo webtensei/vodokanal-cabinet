@@ -1,12 +1,15 @@
+import { authorizationHeader, sessionStore } from '@entities/session/session.model';
 import { httpError, invalidDataError, networkError, preparationError } from './fetch.errors';
+import { isHttpErrorCode } from './fetch.guards';
 import { formatUrl, formatHeaders } from './fetch.lib';
-import { HttpMethod, RequestBody, FetchApiRecord } from './fetch.types';
+import { HttpMethod, RequestBody, FetchApiRecord, GenericError } from './fetch.types';
 
 interface ApiRequest {
   method: HttpMethod;
   body?: RequestBody;
   headers?: FetchApiRecord;
   query?: FetchApiRecord;
+  credentials?: RequestCredentials;
   url: string;
 }
 
@@ -21,6 +24,7 @@ export async function createApiRequest(config: ApiConfig) {
     headers: formatHeaders(config.request.headers || {}),
     body: config.request.body,
     signal: config?.abort,
+    credentials: config.request.credentials ?? 'include',
   }).catch((error) => {
     throw networkError({
       reason: error?.message ?? null,
@@ -55,4 +59,35 @@ export async function createApiRequest(config: ApiConfig) {
       });
 
   return data;
+}
+
+export async function createApiRequestWithRefresh(config: ApiConfig) {
+  try {
+    return await createApiRequest(config);
+  } catch (error) {
+    const unauthorizedCode = isHttpErrorCode(401);
+    if (unauthorizedCode(error as GenericError<any>)) {
+      return await createApiRequest({
+        request: {
+          url: `${import.meta.env.VITE_API_SERVER_URL}/auth/refresh`,
+          method: 'GET',
+          credentials: 'include',
+        },
+      })
+        .then(async (response) => {
+          if (response.accessToken) {
+            sessionStore.getState().updateToken(response.accessToken);
+            const { request, abort } = { ...config };
+            return createApiRequest({ request: { ...request, headers: authorizationHeader() }, abort });
+          }
+        })
+        .catch((e) => {
+          throw httpError({
+            status: e.status,
+            statusText: e.statusText,
+            response: e.response,
+          });
+        });
+    }
+  }
 }
