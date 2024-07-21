@@ -32,3 +32,16 @@ export const RegisterUserDtoSchema = z
 export const LoginResponse = z.object({
   accessToken: z.string(),
 });
+
+export const LoginHistoryResponse = z.object({
+  id: z.string(),
+  login_time: z.date(),
+  user_agent: z.string(),
+  ip_address: z.string(),
+});
+
+export const AuthenticatedDevicesResponse = z.object({
+  id: z.string(),
+  user_agent: z.string(),
+  expired_in: z.date(),
+});

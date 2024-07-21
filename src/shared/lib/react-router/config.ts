@@ -25,19 +25,40 @@ export const routes = {
       return routes.root.concat('profile/');
     },
   },
-  payments:{
+  payments: {
     root() {
       return routes.root.concat('payments/');
     },
   },
-  meters:{
+  meters: {
     root() {
       return routes.root.concat('meters/');
     },
   },
-  indications:{
+  indications: {
     root() {
       return routes.root.concat('indications/');
     },
   },
+  admin: {
+    root() {
+      return routes.root.concat('admin/');
+    },
+    users: {
+      root() {
+        return routes.root.concat('users/');
+      },
+    },
+    massMailing: {
+      root() {
+        return routes.root.concat('mass-mailing/');
+      },
+    },
+    settings: {
+      root() {
+        return routes.root.concat('settings/');
+      },
+    },
+  },
 };
+

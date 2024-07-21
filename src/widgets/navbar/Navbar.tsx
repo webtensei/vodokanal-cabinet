@@ -12,48 +12,50 @@ import {
 } from '@nextui-org/react';
 import { FaAngleRight } from 'react-icons/fa6';
 import { TbLogout2, TbSelector } from 'react-icons/tb';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { addressModel } from '@entities/address';
+import { addressModel, addressHelpers } from '@entities/address';
 import { sessionQueries } from '@entities/session';
 import { userService } from '@entities/user/user.queries';
-import { AddAddress } from '@features/AddAddress';
+import { AddAddress } from '@features/add-address';
 import { routes } from '@shared/lib/react-router';
 import { cn } from '@shared/ui';
 
+
 export function Navbar() {
+  const user = userService.getCache();
   return (
-    <div className='flex flex-col gap-y-4'>
-      <ProfileCard/>
-      <AddressCard/>
-      <MenuCard/>
+    <div className="flex flex-col gap-y-4 md:w-72 md:max-w-72">
+      <ProfileCard />
+      {user?.role === 'USER' && (<AddressCard />)}
+      <MenuCard />
     </div>
   );
 }
 
 function ProfileCard() {
   const user = userService.getCache();
-  const { data:logout, error } = sessionQueries.useLogoutUserMutation();
+  const { mutate: logout, error } = sessionQueries.useLogoutUserMutation();
   useEffect(() => {
     if (error) toast.error(`Не удалось выйти, ${error}`);
   }, [error]);
   return (
-    <Card className='p-2 gap-2 text-center rounded-none md:rounded-large'>
-      <p className=' font-semibold'>{`${user?.name} ${user?.surname}`}</p>
-      <div className='flex flex-row gap-2'>
+    <Card className="p-2 gap-2 text-center rounded-none md:rounded-large">
+      <p className=" font-semibold">{`${user?.name} ${user?.surname}`}</p>
+      <div className="flex flex-row gap-2">
         <Button
-          size='md'
-          color='danger'
-          variant='flat'
+          size="md"
+          color="danger"
+          variant="flat"
           isIconOnly
-          onClick={logout}
+          onPress={() => logout()}
         >
-          <TbLogout2/>
+          <TbLogout2 />
         </Button>
         <Button
-          size='md'
-          color='primary'
-          variant='flat'
+          size="md"
+          color="primary"
+          variant="flat"
           as={Link}
           fullWidth
           to="/profile"
@@ -81,46 +83,43 @@ function AddressCard() {
   };
   return (
     <>
-    <Card>
-      <CardHeader>
-        Адрес
-        <Button
-          variant='light'
-          color='primary'
-          className='absolute right-2 top-2'
-          onPress={()=>setCreateAddressState(true)}
-          size='sm'
-        >
-          Добавить адрес
-        </Button>
-        <AddAddress modalState={createAddressState} changeModalState={setCreateAddressState} modifyFunc={createAddress} />
-      </CardHeader>
-      <CardBody className='px-3 py-0'>
-        {selectedAddress ? (
-          <p className='capitalize'>
-            Улица {selectedAddress.street.toLowerCase()}, дом{' '}
-            {selectedAddress.house}
-            {selectedAddress.apartment
-              ? `, квартира ${  selectedAddress.apartment}`
-              : ''}
-          </p>
-        ) : (
-          'Не нашли адрес'
-        )}
-      </CardBody>
-      <CardFooter className='flex flex-row gap-2'>
-        {addresses && addresses.length > 1 && (
-          <Button onPress={onOpen} fullWidth startContent={<TbSelector />}>
-            Выбрать другой
+      <Card>
+        <CardHeader>
+          Адрес
+          <Button
+            variant="light"
+            color="primary"
+            className="absolute right-2 top-2"
+            onPress={() => setCreateAddressState(true)}
+            size="sm"
+          >
+            Добавить адрес
           </Button>
-        )}
-      </CardFooter>
-    </Card>
-      <Modal backdrop='opaque' isOpen={isOpen} onClose={onClose}>
+          <AddAddress modalState={createAddressState} changeModalState={setCreateAddressState}
+                      modifyFunc={createAddress} />
+        </CardHeader>
+        <CardBody className="px-3 py-0">
+          {selectedAddress ? (
+            <p className="capitalize">
+              {addressHelpers.createFullAddress(selectedAddress)}
+            </p>
+          ) : (
+            'Не нашли адрес'
+          )}
+        </CardBody>
+        <CardFooter className="flex flex-row gap-2">
+          {addresses && addresses.length > 1 && (
+            <Button onPress={onOpen} fullWidth startContent={<TbSelector />}>
+              Выбрать другой
+            </Button>
+          )}
+        </CardFooter>
+      </Card>
+      <Modal backdrop="opaque" isOpen={isOpen} onClose={onClose}>
         <ModalContent>
           {() => (
             <>
-              <ModalHeader className='flex flex-col gap-1'>
+              <ModalHeader className="flex flex-col gap-1">
                 Выбор активного адреса
               </ModalHeader>
               <ModalBody>
@@ -129,30 +128,30 @@ function AddressCard() {
                   onValueChange={(address) => {
                     changeAddress(address);
                     onClose();
-                    
+
                   }}
                 >
                   {addresses &&
                     addresses.map((address) => (
-                        <Radio
-                          key={address.id}
-                          value={address.id}
-                          description={`дом ${address.house}${
-                            address?.apartment
-                              ? `, квартира ${  address.apartment}`
-                              : ''
-                          }`}
-                          classNames={{
-                            base: cn(
-                              'inline-flex m-0 border-content2   bg-content1 hover:bg-content2 items-center justify-between',
-                              'flex-row-reverse max-w-[100%] cursor-pointer rounded-lg gap-4 p-4 border-2 border-content2',
-                              'data-[selected=true]:border-primary',
-                            ),
-                          }}
-                        >
-                          {address.street}
-                        </Radio>
-                      ))}
+                      <Radio
+                        key={address.id}
+                        value={address.id}
+                        description={`дом ${address.house}${
+                          address?.apartment
+                            ? `, квартира ${address.apartment}`
+                            : ''
+                        }`}
+                        classNames={{
+                          base: cn(
+                            'inline-flex m-0 border-content2   bg-content1 hover:bg-content2 items-center justify-between',
+                            'flex-row-reverse max-w-[100%] cursor-pointer rounded-lg gap-4 p-4 border-2 border-content2',
+                            'data-[selected=true]:border-primary',
+                          ),
+                        }}
+                      >
+                        {address.street}
+                      </Radio>
+                    ))}
                 </RadioGroup>
               </ModalBody>
               <ModalFooter />
@@ -160,16 +159,17 @@ function AddressCard() {
           )}
         </ModalContent>
       </Modal>
-      </>
+    </>
   );
 }
 
 function MenuCard() {
-  const links = [
-    {
-      name: 'Приборы учета',
-      href: routes.meters.root(),
-    },
+  const user = userService.getCache();
+  const [links, setLinks] = useState<{ name: string, href: string }[] | null>(null);
+  const userLinks = [{
+    name: 'Приборы учета',
+    href: routes.meters.root(),
+  },
     {
       name: 'История показаний',
       href: routes.indications.root(),
@@ -177,22 +177,47 @@ function MenuCard() {
     {
       name: 'История оплаты',
       href: routes.payments.root(),
+    }];
+
+  const adminLinks = [
+    {
+      name: 'Управление пользователями',
+      href: routes.admin.users.root(),
     },
-  ];
+    {
+      name: 'Массовая рассылка',
+      href: routes.admin.massMailing.root(),
+    },
+    {
+      name: 'Глобальные настройки',
+      href: routes.admin.settings.root(),
+    }];
+  useEffect(() => {
+    if (user?.role === 'USER') {
+      setLinks(prevState => prevState?.length ? [...prevState, ...userLinks] : [...userLinks]);
+    }
+    if (user?.role === 'ADMIN') {
+      setLinks(prevState => prevState?.length ? [...prevState, ...adminLinks] : [...adminLinks]);
+    }
+  }, [user]);
+  useEffect(() => {
+    console.log(links);
+
+  }, [links]);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   return (
-    <Card as="nav" className='rounded-none md:rounded-large'>
+    <Card as="nav" className="rounded-none md:rounded-large">
       <CardHeader>Навигация</CardHeader>
-      <CardFooter className='flex flex-col gap-2 px-0'>
-        {links.map((link) => (
+      <CardFooter className="flex flex-col gap-2 px-0">
+        {links?.length && links.map((link) => (
           <Button
             key={`${link.name}+ ${link.href}`}
             color={pathname === link.href ? 'primary' : 'default'}
             variant={pathname === link.href ? 'flat' : 'light'}
             fullWidth
-            className='justify-start rounded-none'
-            as={Link}
-            href={link.href}
+            className="justify-start rounded-none"
+            onPress={() => navigate(link.href)}
           >
             {link.name}{' '}
           </Button>

@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter, useRouteError } from 'react-router-dom';
 import { AuthPageRoute } from '@/pages/auth';
 import { AuthenticatedLayout, GuestLayout, UserLayout } from '@/pages/layouts';
+import { PaymentsPageRoute } from '@pages/payments';
 import { ProfilePageRoute } from '@pages/profile';
 import { VerifyPageRoute } from '@pages/verify';
 
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
       },
       {
         element: <UserLayout />,
-        children: [ProfilePageRoute],
+        children: [ProfilePageRoute, PaymentsPageRoute],
       },
       {
         element: <AuthenticatedLayout />,

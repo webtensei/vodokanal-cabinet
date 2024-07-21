@@ -28,3 +28,14 @@ export async function sendVerificationCode({
     },
   });
 }
+
+export async function changeContacts(params: { username: number, email:string, phone:string }) {
+  return createApiRequestWithRefresh({
+    request: {
+      url: `${import.meta.env.VITE_API_SERVER_URL}/contacts`,
+      method: 'PUT',
+      body: JSON.stringify({ ...params }),
+      headers: authorizationHeader(),
+    },
+  });
+}

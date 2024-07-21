@@ -22,7 +22,7 @@ export default ({ command, mode }: ConfigEnv) => {
       //   },
       // }),
     ],
-    // 项目部署的基础路径,
+
     base: currentEnv.VITE_PUBLIC_PATH,
     mode,
     resolve: {

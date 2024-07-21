@@ -17,7 +17,7 @@ export function AuthenticatedLayout() {
 export function UserLayout() {
   return (
     <Authenticated>
-      <main className='min-h-screen bg-background max-w-7xl font-sans antialiased flex flex-col mx-auto md:flex-row gap-4 md:pt-8 overflow-hidden'>
+      <main className='min-h-screen bg-background max-w-7xl font-sans antialiased flex flex-col mx-auto md:flex-row gap-4 md:py-8 md:px-6 overflow-hidden'>
           <Navbar/>
           <Outlet />
       </main>

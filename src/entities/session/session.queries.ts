@@ -1,7 +1,12 @@
 // eslint-disable-next-line import/extensions
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { loginUserMutation, logoutUserMutation } from '@entities/session/session.api';
+import {
+  authenticatedDevices,
+  loginHistory,
+  loginUserMutation,
+  logoutUser,
+} from '@entities/session/session.api';
 import { sessionStore } from '@entities/session/session.model';
 import { GenericError } from '@shared/lib/fetch';
 import { routes } from '@shared/lib/react-router';
@@ -10,7 +15,9 @@ const keys = {
   root: () => ['session'],
   login: () => [...keys.root(), 'login'] as const,
   logout: () => [...keys.root(), 'logout'] as const,
+  history: () => [...keys.root(), 'history'] as const,
   register: () => [...keys.root(), 'register'] as const,
+  authenticatedDevices: () => [...keys.root(), 'authenticatedDevices'] as const,
 };
 
 export function useLoginUserMutation() {
@@ -29,11 +36,26 @@ export function useLogoutUserMutation() {
   const navigate = useNavigate();
   return useMutation({
     mutationKey: keys.logout(),
-    mutationFn: logoutUserMutation,
+    mutationFn: logoutUser,
     onSuccess: async () => {
-      sessionStore.setState({ updateToken:()=>null });
+      sessionStore.getState().updateToken(null);
       navigate(routes.auth.login());
     },
+    onError: (error: GenericError<any>) => error,
+  });
+}
+export function useLoginHistory() {
+  return useMutation({
+    mutationKey: keys.history(),
+    mutationFn: loginHistory,
+    onError: (error: GenericError<any>) => error,
+  });
+}
+
+export function useAuthenticatedDevices() {
+  return useMutation({
+    mutationKey: keys.authenticatedDevices(),
+    mutationFn: authenticatedDevices,
     onError: (error: GenericError<any>) => error,
   });
 }

@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { sendVerificationCode } from '@entities/contacts/contacts.api';
+import { changeContacts, sendVerificationCode } from '@entities/contacts/contacts.api';
 import { GenericError } from '@shared/lib/fetch';
 import { routes } from '@shared/lib/react-router';
 
@@ -8,6 +8,7 @@ const keys = {
   root: () => ['contacts'],
   verifyPhone: () => [...keys.root(), 'verifyPhoneCode'] as const,
   verifyEmail: () => [...keys.root(), 'verifyEmailCode'] as const,
+  changeContacts: () => [...keys.root(), 'changeContacts'] as const,
 };
 
 export function useVerifyPhoneMutation() {
@@ -23,15 +24,11 @@ export function useVerifyPhoneMutation() {
   });
 }
 
-export function useVerifyEmailMutation() {
-  const navigate = useNavigate();
+export function useChangeContacts() {
 
   return useMutation({
-    mutationKey: keys.verifyEmail(),
-    mutationFn: sendVerificationCode,
-    onSuccess: async () => {
-      navigate(routes.profile.root());
-    },
-    onError: (error: GenericError<any>) => error,
+    mutationKey: keys.changeContacts(),
+    mutationFn: changeContacts,
+    onError: (error: GenericError<any>) => console.log(error),
   });
 }

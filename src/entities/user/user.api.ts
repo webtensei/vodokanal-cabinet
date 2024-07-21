@@ -10,3 +10,14 @@ export async function fetchCurrentUser(params: { username: number }) {
     },
   });
 }
+
+export async function changePassword(params: { username: number, password:string, newPassword:string }) {
+  return createApiRequestWithRefresh({
+    request: {
+      url: `${import.meta.env.VITE_API_SERVER_URL}/user/${params.username}/change/password`,
+      method: 'PATCH',
+      body: JSON.stringify({ ...params }),
+      headers: authorizationHeader(),
+    },
+  });
+}

@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { fetchCurrentUser } from '@entities/user/user.api';
+import { changePassword, fetchCurrentUser } from '@entities/user/user.api';
 import { TUser } from '@entities/user/user.types';
 import { GenericError } from '@shared/lib/fetch';
 import { queryClient } from '@shared/lib/react-query';
@@ -7,7 +7,8 @@ import { queryClient } from '@shared/lib/react-query';
 const keys = {
   root: () => ['user'],
   currentUser: () => [...keys.root(), 'currentUser'] as const,
-  editUser: () => [...keys.root(), 'editUser'] as const,
+  changeCredentials: () => [...keys.root(), 'changeCredentials'] as const,
+  changePassword: () => [...keys.root(), 'changePassword'] as const,
 };
 export const userService = {
   queryKey: () => keys.currentUser(),
@@ -27,5 +28,13 @@ export function useFetchCurrentUserMutation() {
       userService.setCache(user);
     },
     onError: (error: GenericError<any>) => error,
+  });
+}
+
+export function useChangePassword() {
+  return useMutation({
+    mutationKey: keys.changePassword(),
+    mutationFn: changePassword,
+    onError: (error: GenericError<any>) => console.log(error),
   });
 }

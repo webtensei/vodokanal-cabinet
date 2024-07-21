@@ -16,4 +16,10 @@ export const FindAddressDtoSchema = z.object({
   house: z.string().min(1, 'Требуется ввести номер дома'),
   apartment: z.string().optional().or(z.literal('')),
   type: z.enum(['CITIZEN', 'BUSINESS']),
+  isPrivateHouse: z.boolean(),
 });
+
+export const FindAddressResponse = z.array(z.object({
+  name: z.string(),
+  id: z.string(),
+}));

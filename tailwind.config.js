@@ -20,13 +20,15 @@ module.exports = {
         light: {
           layout: {},
           colors: {
-            background: '#edeef0',
+            // edeef0
+            background: '#FFFFFF',
           },
         },
         dark: {
           layout: {},
           colors: {
             background: '#03131A',
+            // 03131A
             foreground: '#f1f1f1',
           },
         },

@@ -1,0 +1,1 @@
+export { ChangeEmailModal, ChangePhoneModal } from './change-contacts-modals.ui';
