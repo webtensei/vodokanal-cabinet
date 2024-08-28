@@ -1,4 +1,4 @@
-import { cloneElement, ReactElement, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import {
   Button, Divider,
   Modal,
@@ -12,8 +12,17 @@ import { clsx } from 'clsx';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import { sessionQueries, sessionTypes } from '@entities/session';
 
-export function AuthenticatedDevicesModal({ rendererItem }: { rendererItem: ReactElement }) {
+export function AuthenticatedDevicesWrapper({ children  }: { children: ({ onOpen }: { onOpen: () => void }) => ReactNode }) {
   const { onOpen, isOpen, onClose } = useDisclosure();
+  return (
+    <>
+      {children({ onOpen })}
+      {isOpen && (<AuthenticatedDevicesModal isOpen={isOpen} onClose={onClose}/>)}
+    </>
+  );
+}
+function AuthenticatedDevicesModal({ isOpen, onClose }:{ isOpen:boolean, onClose:()=>void }) {
+
   const [devices, setDevices] = useState<sessionTypes.AuthenticatedDevices[] | []>([]);
   const { mutate: getDevices, data, isError, isPending } = sessionQueries.useAuthenticatedDevices();
   useEffect(() => {
@@ -26,8 +35,6 @@ export function AuthenticatedDevicesModal({ rendererItem }: { rendererItem: Reac
   }, [data]);
   const currentDate = new Date();
   return (
-    <>
-      {cloneElement(rendererItem, { onClick: () => onOpen() })}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalContent>
           {(onClose) => (
@@ -110,6 +117,5 @@ export function AuthenticatedDevicesModal({ rendererItem }: { rendererItem: Reac
           )}
         </ModalContent>
       </Modal>
-    </>
   );
 }

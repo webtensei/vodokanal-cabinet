@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
@@ -12,14 +12,23 @@ import {
 } from '@nextui-org/react';
 import { EyeFilledIcon, EyeSlashFilledIcon } from '@nextui-org/shared-icons';
 import { FieldValues, useForm } from 'react-hook-form';
-import { IoLockOpenOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import { userQueries } from '@entities/user';
 import { ChangePasswordDto, ChangePasswordDtoSchema } from './change-password.zod';
 
-export function ChangePassword() {
+export function ChangePasswordWrapper({ children  }: { children: ({ onOpen }: { onOpen: () => void }) => ReactNode }) {
+  const { onOpen, isOpen, onClose, onOpenChange } = useDisclosure();
+  return (
+    <>
+      {children({ onOpen })}
+      {isOpen && (<ChangePasswordModal isOpen={isOpen} onClose={onClose} onOpenChange={onOpenChange}/>)}
+    </>
+  );
+}
+
+
+function ChangePasswordModal({ isOpen, onClose, onOpenChange }:{ isOpen:boolean, onClose:()=>void, onOpenChange:()=>void }) {
   const user = userQueries.userService.getCache();
-  const { onOpen, isOpen, onOpenChange, onClose } = useDisclosure();
   const [isVisible, setIsVisible] = useState(false);
   const { mutate:changePassword, isPending, error, isError, data } = userQueries.useChangePassword();
   // TODO перевести бэк часть на zod validation
@@ -36,16 +45,12 @@ export function ChangePassword() {
   useEffect(() => {
     if (isError) toast.error(error.response.message || 'Неизвестная ошибка');
     if (data && !isError) {
-      console.log(data);
       toast.success('Пароль успешно изменён 🎉');
       onClose();
     }
   }, [isError, data]);
+
   return (
-    <>
-      <Button onPress={onOpen} startContent={<IoLockOpenOutline />}>
-        Изменить пароль
-      </Button>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -130,8 +135,8 @@ export function ChangePassword() {
                   <Button
                     type="submit"
                     isLoading={isPending}
-                    color="success"
-                    variant="bordered"
+                    color="primary"
+                    variant="solid"
                   >
                     Сохранить
                   </Button>
@@ -140,7 +145,7 @@ export function ChangePassword() {
             </form>
           )}
         </ModalContent>
-      </Modal></>
+      </Modal>
   );
 }
 

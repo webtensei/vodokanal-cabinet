@@ -7,6 +7,7 @@ export async function getPaymentsByAddress( addressId:string, page:number, pageS
     request: {
       url: `${import.meta.env.VITE_API_SERVER_URL}/payment/${addressId}?page=${page}&pageSize=${pageSize}`,
       method: 'GET',
+      query:{ page, pageSize },
       headers: authorizationHeader(),
     },
   });

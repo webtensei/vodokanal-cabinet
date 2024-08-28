@@ -2,16 +2,16 @@ import { z } from 'zod';
 
 export const AddressDtoSchema = z.object({
   id: z.string(),
-  username: z.string().min(8, 'Длинна логина должна быть от 8 символов'),
+  username: z.number().min(8, 'Длинна логина должна быть от 8 символов'),
   street: z.string().min(4, 'Требуется ввести название улицы'),
   house: z.string().min(1, 'Требуется ввести номер дома'),
-  apartment: z.string().optional().or(z.literal('')),
+  apartment: z.string().optional().or(z.literal('')).nullable(),
   type: z.enum(['CITIZEN', 'BUSINESS']),
   system_id: z.string().min(1, 'Не получен system_id'),
 });
 
 
-export const FindAddressDtoSchema = z.object({
+export const FindAddressFormSchema = z.object({
   street: z.string().min(4, 'Требуется ввести название улицы'),
   house: z.string().min(1, 'Требуется ввести номер дома'),
   apartment: z.string().optional().or(z.literal('')),
@@ -19,7 +19,21 @@ export const FindAddressDtoSchema = z.object({
   isPrivateHouse: z.boolean(),
 });
 
-export const FindAddressResponse = z.array(z.object({
-  name: z.string(),
-  id: z.string(),
+export const FindAddressDtoSchema = z.object({
+  street: z.string().min(4, 'Требуется ввести название улицы'),
+  house: z.string().min(1, 'Требуется ввести номер дома'),
+  apartment: z.string().optional().or(z.literal('')).nullable(),
+  type: z.enum(['CITIZEN', 'BUSINESS']),
+});
+
+export const FindAddressResponseZ = z.array(z.object({
+  address: z.string(),
+  tenant: z.string(),
+  account: z.string(),
 }));
+
+export const ServiceDtoSchema = z.object({
+  address: z.string(),
+  tenant: z.string(),
+  account: z.string(),
+});

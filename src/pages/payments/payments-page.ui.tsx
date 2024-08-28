@@ -23,7 +23,7 @@ export function PaymentsPage() {
     'pending': { color: 'text-warning', text: 'Ожидание' },
     'succeeded': { color: 'text-success', text: 'Успешно' },
   };
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
 
   const {
     data: payments,
@@ -38,7 +38,7 @@ export function PaymentsPage() {
 
   if (!selectedAddress && isReady) {
     return (
-      <div className="flex w-full flex-col gap-4 md:flex-row">
+      <div className="px-2 pb-8 md:px-0 md:pb-0 flex w-full flex-col gap-4 md:flex-row">
         <Code color="danger" className="text-medium">Вы не выбрали адрес в левом меню</Code>
       </div>
     );
@@ -50,7 +50,7 @@ export function PaymentsPage() {
   }
 
   if (isError) {
-    return <div className="flex w-full flex-col gap-4 md:flex-row">
+    return <div className="px-2 pb-8 md:px-0 md:pb-0 flex w-full flex-col gap-4 md:flex-row">
       <Code color="danger" className="text-medium">Произошла ошибка, попробуйте обновить страницу</Code>
     </div>;
   }
@@ -58,13 +58,13 @@ export function PaymentsPage() {
   // @ts-ignore
   return (
     <div className="flex w-full flex-col gap-4">
-      <Table removeWrapper className="overflow-y-auto">
+      <Table removeWrapper aria-label='Payments table' className="overflow-y-auto">
         <TableHeader>
-          <TableColumn>Идентификатор</TableColumn>
-          <TableColumn>Сумма</TableColumn>
-          <TableColumn>Дата создания</TableColumn>
-          <TableColumn>Статус</TableColumn>
-          <TableColumn className="text-end">Действия</TableColumn>
+          <TableColumn>ИДЕНТИФИКАТОР</TableColumn>
+          <TableColumn>СУММА</TableColumn>
+          <TableColumn>ДАТА СОЗДАНИЯ</TableColumn>
+          <TableColumn>СТАТУС</TableColumn>
+          <TableColumn className="text-end">ДЕЙСТВИЯ</TableColumn>
         </TableHeader>
         <TableBody emptyContent="Нет истории оплат.">
           {payments.data.map((payment) => (
@@ -95,7 +95,9 @@ export function PaymentsPage() {
                           Сумма
                         </TableColumn>
                       </TableHeader>
-                      <TableBody>
+                      <TableBody
+                        items={payment.services_list ?? []}
+                      >
                         {payment.services_list.map((service, index) => (
                             <TableRow key={service}>
                               <TableCell>{service ?? 'Неизвестно'}</TableCell>
@@ -130,7 +132,7 @@ export function PaymentsPage() {
                       </Button>
                     </DropdownTrigger>
                     <DropdownMenu>
-                      <DropdownItem>Удалить информацию о платеже</DropdownItem>
+                      <DropdownItem isDisabled>Удалить информацию о платеже</DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
                 </div>
@@ -139,8 +141,8 @@ export function PaymentsPage() {
           ))}
         </TableBody>
       </Table>
-      {payments.meta.lastPage > 1 && (<Pagination showControls total={payments.meta.lastPage} initialPage={page + 1}
-                                                  onChange={(page) => setPage(page)} />)}
+      {payments.meta.lastPage > 1 && (<Pagination className='flex justify-end mr-0' showControls total={payments.meta.lastPage} initialPage={page}
+                                                       onChange={(page) => setPage(page)} />)}
 
     </div>
   );

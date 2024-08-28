@@ -7,3 +7,9 @@
         @apply pointer-events-none text-2xl text-default-400
     }
 }
+
+html, body, form, fieldset, table, tr, td, img {
+    margin: 0;
+    padding: 0;
+    font: 100%/150% calibri,helvetica,sans-serif;
+}

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button, Card, CardFooter, CardHeader, ScrollShadow, Spinner, Tooltip } from '@nextui-org/react';
 import { InfoIcon } from '@nextui-org/shared-icons';
 import { sessionQueries, sessionTypes } from '@entities/session';
-import { AuthenticatedDevicesModal } from '@features/authenticated-devices';
+import { AuthenticatedDevicesWrapper } from '@features/authenticated-devices';
 
 export function LoginHistory() {
   const [history, setHistory] = useState<sessionTypes.LoginHistory[] | []>([]);
@@ -63,8 +63,8 @@ export function LoginHistory() {
   return (
     <Card>
       <CardHeader className="font-bold justify-between">История авторизаций
-        <Tooltip content='Автоматическое удаление истории раз в 3 месяца'>
-          <Button isIconOnly variant='light'><InfoIcon/></Button>
+        <Tooltip content="Автоматическое удаление истории раз в 3 месяца">
+          <Button isIconOnly variant="light"><InfoIcon /></Button>
         </Tooltip>
       </CardHeader>
       <ScrollShadow
@@ -75,14 +75,17 @@ export function LoginHistory() {
       </ScrollShadow>
 
       <CardFooter className="flex flex-row justify-between">
-        <AuthenticatedDevicesModal rendererItem={
+        <AuthenticatedDevicesWrapper>
+          {({ onOpen }) =>
           <Button
-          variant='light'
-          color='primary'
-          size='sm'
-        >
-          Авторизированные устройства
-        </Button>} />
+            variant="light"
+            color="primary"
+            size="sm"
+            onPress={onOpen}
+          >
+            Авторизированные устройства
+          </Button>
+        }</AuthenticatedDevicesWrapper>
       </CardFooter>
     </Card>
 

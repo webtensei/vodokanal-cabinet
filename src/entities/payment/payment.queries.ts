@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { getPaymentsByAddress } from '@entities/payment/payment.api';
 
 const keys = {
@@ -11,10 +11,7 @@ export function usePaymentsByAddressQuery(addressId: string, page:number = 0, pa
     queryKey: keys.paymentsByAddress(addressId, page, pageSize),
     queryFn: () => getPaymentsByAddress(addressId, page, pageSize),
     enabled: false,
-    initialData: {
-      data: [], meta: {
-        total: 0, lastPage: 0, currentPage: 0, perPage: 0, prev: 0, next: 0,
-      },
-    },
+    placeholderData: keepPreviousData,
+
   });
 }

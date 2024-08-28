@@ -36,7 +36,6 @@ export async function createApiRequest(config: ApiConfig) {
     const fullResponse = await response.text().catch(() => null);
     const parsedResponse = fullResponse ? JSON.parse(fullResponse) : [];
     if (response.status === 400) {
-      // TODO: ВЕРНУТЬ В JSON МУТАТИОН И В ZOD правильные валидаторы
       throw invalidDataError({ validationErrors: parsedResponse?.errors || [], response: parsedResponse });
     }
     throw httpError({

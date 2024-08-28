@@ -35,6 +35,11 @@ export const routes = {
       return routes.root.concat('meters/');
     },
   },
+  services: {
+    root() {
+      return routes.root.concat('services/');
+    },
+  },
   indications: {
     root() {
       return routes.root.concat('indications/');

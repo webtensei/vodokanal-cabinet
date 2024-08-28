@@ -35,6 +35,6 @@ export function useChangePassword() {
   return useMutation({
     mutationKey: keys.changePassword(),
     mutationFn: changePassword,
-    onError: (error: GenericError<any>) => console.log(error),
+    onError: (error: GenericError<any>) => error,
   });
 }

@@ -1,1 +1,1 @@
-export { AddAddress } from './add-address.ui';
+export { AddAddressWrapper } from './add-address.ui';

@@ -1,13 +1,15 @@
 import {
+  Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Divider,
 } from '@nextui-org/react';
+import { IoLockOpenOutline } from 'react-icons/io5';
 import { userHelpers, userQueries } from '@entities/user';
 import { AddressesTable } from '@features/addresses-table';
-import { ChangePassword } from '@features/change-password';
+import { ChangePasswordWrapper } from '@features/change-password';
 import { Contacts } from '@widgets/contacts';
 import { LoginHistory } from '@widgets/login-history';
 
@@ -15,7 +17,7 @@ export function ProfilePage() {
   const user = userQueries.userService.getCache();
 
   return (
-    <div className="flex w-full flex-col gap-4 md:flex-row">
+    <div className="px-2 pb-8 md:px-0 md:pb-0 flex w-full flex-col gap-4 md:flex-row">
       <div className="flex w-full flex-col gap-4 md:w-3/5">
         <Card
           data-element="profile"
@@ -37,7 +39,9 @@ export function ProfilePage() {
             </div>
           </CardBody>
           <CardFooter>
-            <ChangePassword />
+            <ChangePasswordWrapper>
+              {({ onOpen })=> <Button onPress={onOpen} startContent={<IoLockOpenOutline />}>Изменить пароль</Button>}
+            </ChangePasswordWrapper>
           </CardFooter>
         </Card>
         <AddressesTable />

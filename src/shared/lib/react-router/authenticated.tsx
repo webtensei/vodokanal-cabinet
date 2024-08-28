@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
+import { Spinner } from '@nextui-org/react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { hasToken, sessionStore, tokenPayload } from '@entities/session/session.model';
@@ -31,8 +32,8 @@ export function Authenticated({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (user && (!user.contacts.email_activated || !user.contacts.phone_activated))
       return navigate(routes.auth.verify());
-  }, [user]);
-  if (isLoading) return <div>загрузка</div>;
+  }, [user]); 
+  if (isLoading) return <div className='w-screen h-screen flex justify-center items-center'><Spinner size='lg' label="Загрузка" color="primary" labelColor="primary"/></div>;
   console.log('render authenticated');
 
   return <>{children}</>;

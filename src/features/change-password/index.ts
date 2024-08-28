@@ -1,1 +1,1 @@
-export * from './change-password.ui';
+export { ChangePasswordWrapper } from './change-password.ui';

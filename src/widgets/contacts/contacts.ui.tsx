@@ -1,7 +1,7 @@
 import { Button, Card, CardHeader, Chip, Input } from '@nextui-org/react';
 import { MdCancel, MdCheckCircle } from 'react-icons/md';
 import { userQueries } from '@entities/user';
-import { ChangeEmailModal, ChangePhoneModal } from '@features/change-contacts';
+import { ChangeEmailWrapper, ChangePhoneWrapper } from '@features/change-contacts';
 
 export function Contacts() {
   const user = userQueries.userService.getCache();
@@ -43,9 +43,9 @@ export function Contacts() {
               defaultValue={user?.contacts.email}
               className="max-w-full"
             />
-            <ChangeEmailModal
-              rendererItem={<Button className="absolute right-0 h-full rounded-l-none">Изменить</Button>}
-            />
+            <ChangeEmailWrapper>
+              {({ onOpen }) => <Button onPress={onOpen} className="absolute right-0 h-full rounded-l-none">Изменить</Button>}
+            </ChangeEmailWrapper>
           </div>
         </div>
 
@@ -83,9 +83,9 @@ export function Contacts() {
               defaultValue={user?.contacts.phone}
               className="max-w-full"
             />
-            <ChangePhoneModal
-              rendererItem={<Button className="absolute right-0 h-full rounded-l-none">Изменить</Button>}
-            />
+            <ChangePhoneWrapper>
+              {({ onOpen }) => <Button onPress={onOpen} className="absolute right-0 h-full rounded-l-none">Изменить</Button>}
+            </ChangePhoneWrapper>
           </div>
         </div>
       </div>

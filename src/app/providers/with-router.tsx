@@ -1,8 +1,10 @@
 import { RouterProvider, createBrowserRouter, useRouteError } from 'react-router-dom';
 import { AuthPageRoute } from '@/pages/auth';
 import { AuthenticatedLayout, GuestLayout, UserLayout } from '@/pages/layouts';
+import { MetersPageRoute } from '@pages/meters';
 import { PaymentsPageRoute } from '@pages/payments';
 import { ProfilePageRoute } from '@pages/profile';
+import { ServicesPageRoute } from '@pages/services';
 import { VerifyPageRoute } from '@pages/verify';
 
 // https://github.com/remix-run/react-router/discussions/10166
@@ -22,7 +24,7 @@ const router = createBrowserRouter([
       },
       {
         element: <UserLayout />,
-        children: [ProfilePageRoute, PaymentsPageRoute],
+        children: [ProfilePageRoute, PaymentsPageRoute, MetersPageRoute, ServicesPageRoute],
       },
       {
         element: <AuthenticatedLayout />,

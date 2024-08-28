@@ -21,7 +21,6 @@ export const RegisterUserDtoSchema = z
     patronymic: z.string().max(50, 'Слишком длинное отчество, обратитесь в поддержку').optional().or(z.literal('')),
     password: z.string().min(8, 'Длинна пароля должна быть от 8 символов').max(32, 'Длинна должна быть до 32 символов'),
     confirmPassword: z.string(),
-    // TODO: не уверен что это будет работать, смотри внимательно
     address: addressContracts.AddressDtoSchema,
   })
   .refine((data) => data.password === data.confirmPassword, {
