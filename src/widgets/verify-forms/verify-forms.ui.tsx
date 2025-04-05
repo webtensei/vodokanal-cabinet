@@ -8,6 +8,8 @@ import { toast } from 'react-toastify';
 import { contactsContracts, contactsTypes, contactsQueries, contactsApi } from '@entities/contacts';
 import { userService } from '@entities/user/user.queries';
 import { addServerErrors, isErrorWithValidationErrors } from '@shared/lib/zod';
+import { ChangeEmailWrapper } from '@features/change-contacts';
+
 
 export function VerifyPhoneForm() {
   const user = userService.getCache();
@@ -164,13 +166,17 @@ export function VerifyEmailForm() {
           />
         </CardBody>
         <CardFooter className='justify-between gap-4'>
-          <Button>Изменить почту</Button>
+          <ChangeEmailWrapper>
+            {({ onOpen }) => (
+                <Button onPress={onOpen}>Изменить почту</Button>
+            )}
+          </ChangeEmailWrapper>
+          
           <Button
-            disabled={Boolean(timer)}
-            isLoading={Boolean(timer) || creationInProgress}
-            type='submit'
-            color='success'
-          >
+                  disabled={Boolean(timer)}
+                  isLoading={Boolean(timer) || creationInProgress}
+                  type='submit'
+                  color='success'>
             {timer
               ? `Повторить через ${timer} с.`
               : 'Отправить ссылку на почту'}

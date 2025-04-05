@@ -33,7 +33,8 @@ export const FindAddressResponseZ = z.array(z.object({
 }));
 
 export const ServiceDtoSchema = z.object({
-  address: z.string(),
-  tenant: z.string(),
-  account: z.string(),
+  id: z.string(),
+  name: z.string(),
+  saldo: z.string(),
+  peni: z.string(),
 });

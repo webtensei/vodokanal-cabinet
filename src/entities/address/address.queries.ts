@@ -1,7 +1,6 @@
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import { addAddress, fetchKnownStreets, findAddress, getServicesList } from '@entities/address/address.api';
 import { KnownStreet } from '@entities/address/address.types';
-import { getMetersList } from '@entities/meter/meter.api.ts';
 import { GenericError } from '@shared/lib/fetch';
 import { queryClient } from '@shared/lib/react-query';
 

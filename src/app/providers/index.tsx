@@ -18,9 +18,9 @@ function Providers() {
           <BrowserRouter />
           <ToastifyContainerProvider />
         </QueryClientProvider>
-      </NextThemesProvider>
-    </NextUIProvider>
-  );
+</NextThemesProvider>
+</NextUIProvider>
+);
 }
 
 const SuspenseProvider = withSuspense(Providers, {

@@ -1,7 +1,7 @@
 import { LoginResponse } from '@entities/session/session.contracts';
 import { mapUser } from '@entities/session/session.lib';
 import { authorizationHeader } from '@entities/session/session.model';
-import { TLoginUserDto } from '@entities/session/session.types';
+import { TLoginUserDto, TRegisterUserDto } from '@entities/session/session.types';
 import { createApiRequestWithRefresh, createJsonMutation } from '@shared/lib/fetch';
 import { zodContract } from '@shared/lib/zod';
 
@@ -42,6 +42,15 @@ export async function logoutUser() {
       url: `${import.meta.env.VITE_API_SERVER_URL}/auth/logout`,
       method: 'GET',
       headers: authorizationHeader(),
+    },
+  });
+}
+export async function registerUserMutation(params: { user: TRegisterUserDto }) {
+  return createJsonMutation({
+    request: {
+      url: `${import.meta.env.VITE_API_SERVER_URL}/auth/register`,
+      method: 'POST',
+      body: JSON.stringify({ ...params.user }),
     },
   });
 }

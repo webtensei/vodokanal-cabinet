@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter, useRouteError } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter, useRouteError, Navigate } from 'react-router-dom';
 import { AuthPageRoute } from '@/pages/auth';
 import { AuthenticatedLayout, GuestLayout, UserLayout } from '@/pages/layouts';
 import { MetersPageRoute } from '@pages/meters';
@@ -18,6 +18,10 @@ const router = createBrowserRouter([
   {
     errorElement: <BubbleError />,
     children: [
+      {
+        path: '/',
+        element: <Navigate to="/profile" replace />,
+      },
       {
         element: <GuestLayout />,
         children: [AuthPageRoute],

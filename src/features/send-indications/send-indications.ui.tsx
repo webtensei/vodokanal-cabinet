@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Code, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { queryClient } from '@/shared/lib/react-query';
 import { Address } from '@entities/address/address.types';
 import { meterQueries } from '@entities/meter';
 import { MeterByCitizenAddress } from '@entities/meter/meter.types';
@@ -31,6 +32,7 @@ export function SendIndicationsModal({ meter, address, isOpen, closeModal }: {
     if (isError) toast.error(error.response.message || 'Неизвестная ошибка');
     if (data && !isError) {
       toast.success('Вы успешно передали показания 🎉');
+      queryClient.invalidateQueries({ queryKey: meterQueries.keys.addressMetersList(address.id) });
       closeModal();
     }
   }, [isError, data]);

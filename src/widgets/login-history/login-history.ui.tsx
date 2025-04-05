@@ -77,14 +77,14 @@ export function LoginHistory() {
       <CardFooter className="flex flex-row justify-between">
         <AuthenticatedDevicesWrapper>
           {({ onOpen }) =>
-          <Button
-            variant="light"
-            color="primary"
-            size="sm"
-            onPress={onOpen}
-          >
-            Авторизированные устройства
-          </Button>
+            <Button
+              variant="light"
+              color="primary"
+              size="sm"
+              onPress={onOpen}
+            >
+              Авторизированные устройства
+            </Button>
         }</AuthenticatedDevicesWrapper>
       </CardFooter>
     </Card>

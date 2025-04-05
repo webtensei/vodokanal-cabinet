@@ -7,7 +7,11 @@ import { toast } from 'react-toastify';
 import { sessionContracts, sessionTypes, sessionQueries } from '@entities/session';
 import { addServerErrors, isErrorWithValidationErrors } from '@shared/lib/zod';
 import { cn } from '@shared/ui';
-
+import { routes } from '@shared/lib/react-router';
+import { useNavigate } from 'react-router-dom';
+import { DevTool } from '@hookform/devtools';
+import { addressTypes } from '@entities/address';
+import { AddAddressWrapper } from '@/features/add-address';
 export function LoginForm() {
   const {
     register,
@@ -78,12 +82,23 @@ export function LoginForm() {
 }
 
 export function RegisterForm() {
+
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     trigger,
     formState: { errors, isSubmitting },
+    setError,
+    setValue,
+    control,
   } = useForm<sessionTypes.TRegisterUserDto>({ resolver: zodResolver(sessionContracts.RegisterUserDtoSchema) });
+
+  const [addAddressModalState, setAddAddressModalState] = useState(false);
+
+
+  const { mutateAsync } = sessionQueries.useRegisterUserMutation();
 
   const [step, setStep] = useState(0);
   const handleNextStep = async () => {
@@ -100,21 +115,44 @@ export function RegisterForm() {
     setStep(step - 1);
   };
 
-  async function onSubmit(data: FieldValues) {
-    if (step < registerTabs.length - 1) return handleNextStep();
+  async function onSubmit(data: sessionTypes.TRegisterUserDto) {
     console.log(data);
-    return true;
+    if (step < registerTabs.length - 1) return handleNextStep();
+      await mutateAsync({ user: data }).then(() => {
+        toast.success('Вы успешно зарегистрировались!');
+        navigate(routes.auth.login());
+    }).catch((error) => {
+      if (isErrorWithValidationErrors(error)) {
+        toast.error(`${error.response?.message || 'Произошла ошибка'}`);
+      } else {
+        toast.error(`${error.response?.message || 'Произошла ошибка'}`);
+      }
+    });
+  }
+  const addAddress = (address: addressTypes.Address) => {
+    console.log(address);
+    setValue('address', address);
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <DevTool control={control} />
       <Card>
         <CardBody>
           <Progress size="md" className="pb-4" value={step * 34} aria-label="Прогресс" />
           {registerTabs.map((tab, index) => (
-            <div className={cn('flex flex-col gap-4', step !== index && 'hidden')}>
+            <div className={cn('flex flex-col gap-4', step !== index && 'hidden')} key={tab.map((slot) => slot.name).join('-')}>
               {tab.map((slot) => {
-                if (slot.item === 'component') return slot.component;
+                if (slot.item === 'addressSelect') return (
+                  <AddAddressWrapper setDisclosureState={setAddAddressModalState} modifyFunc={(address) => {
+                    addAddress(address as addressTypes.Address);
+                  }}>
+                    {({ onOpen }) => (
+                      <Button onPress={onOpen} color="primary" variant="light"
+                        startContent={'+'}>Добавить
+                        адрес</Button>)}
+                  </AddAddressWrapper>
+                );
                 if (slot.item === 'input')
                   return (
                     <Input
@@ -194,7 +232,7 @@ const registerTabs = [
   [
     {
       item: 'input',
-      name: 'uname',
+      name: 'name',
       type: 'string',
       label: 'Имя',
       placeholder: 'Введите имя',
@@ -216,8 +254,7 @@ const registerTabs = [
   ],
   [
     {
-      item: 'component',
-      component: <Input label="Он вставлен в маппинге" placeholder="Кастомный компонент" />,
+      item: 'addressSelect',
     },
     {
       item: 'input',

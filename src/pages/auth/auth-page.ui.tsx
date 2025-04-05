@@ -22,9 +22,6 @@ export function AuthPage() {
   }
 
   useEffect(() => {
-    if (pathname === routes.auth.register()) handleTabChange(IAuthAction.register);
-  }, [pathname, handleTabChange]);
-  useEffect(() => {
     if (hasToken()) return navigate(routes.profile.root());
   }, []);
 

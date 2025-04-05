@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import {
   Button,
-  Code,
   Skeleton,
   Table,
   TableBody,
   TableCell,
   TableColumn,
   TableHeader,
-  TableRow, useDisclosure,
+  TableRow,
+  useDisclosure,
 } from '@nextui-org/react';
 import { GoDotFill } from 'react-icons/go';
 import { addressModel } from '@entities/address';
@@ -24,9 +24,47 @@ export function CitizenMeterTable() {
   const {
     data: meters,
     isPending,
-    isError,
     refetch,
   } = meterQueries.useAddressMetersList(selectedAddress?.id as string);
+
+  const columns = [
+    { name: 'НАЗВАНИЕ', uid: 'name' },
+    { name: 'СЕРИЙНЫЙ НОМЕР', uid: 'num' },
+    { name: 'ПОВЕРЕН ДО', uid: 'verify_date' },
+    { name: 'ТАРИФ', uid: 'rate' },
+    { name: 'ДАТА ПОСЛЕДНИХ ПОКАЗАНИЙ', uid: 'date' },
+    { name: 'ПОСЛЕДНИЕ ПОКАЗАНИЯ', uid: 'ind' },
+    { name: 'ДЕЙСТВИЯ', uid: 'actions' },
+  ];
+
+  const renderCell = (meter: MeterByCitizenAddress, columnKey: React.Key) => {
+    switch (columnKey) {
+      case 'name':
+        return (
+          <div className="flex items-center gap-1">
+            {meter.name}<GoDotFill className="text-success" />
+          </div>
+        );
+      case 'rate':
+        return `${Number(meter.rate) / 100} Руб.`;
+      case 'ind':
+        return Number(meter.ind) / 100;
+      case 'actions':
+        return (
+          <Button 
+            href='#' 
+            variant='solid' 
+            color='primary' 
+            onPress={() => setModalState(meter)}
+          >
+            Передать показания
+          </Button>
+        );
+      default:
+        return meter[columnKey as keyof MeterByCitizenAddress];
+    }
+  };
+
   useEffect(() => {
     if (selectedAddress) refetch();
   }, [selectedAddress]);
@@ -45,43 +83,42 @@ export function CitizenMeterTable() {
     );
   }
 
-  if (isError) {
-    return <div className="px-2 pb-8 md:px-0 md:pb-0 flex w-full flex-col gap-4 md:flex-row">
-      <Code color="danger" className="text-medium">Произошла ошибка, попробуйте обновить страницу</Code>
-    </div>;
-  }
   return (
     <div>
-      <Table removeWrapper aria-label="Meters table" className="overflow-y-auto">
-        <TableHeader>
-          <TableColumn>НАЗВАНИЕ</TableColumn>
-          <TableColumn>СЕРИЙНЫЙ НОМЕР</TableColumn>
-          <TableColumn>ПОВЕРЕН ДО</TableColumn>
-          <TableColumn>ТАРИФ</TableColumn>
-
-          <TableColumn>ДАТА ПОСЛЕДНИХ ПОКАЗАНИЙ</TableColumn>
-          <TableColumn>ПОСЛЕДНИЕ ПОКАЗАНИЯ</TableColumn>
-          <TableColumn>ДЕЙСТВИЯ</TableColumn>
+      <Table 
+        removeWrapper 
+        aria-label="Meters table" 
+        className="overflow-y-auto"
+      >
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn key={column.uid}>
+              {column.name}
+            </TableColumn>
+          )}
         </TableHeader>
-        <TableBody>
-          {meters?.map((meter) => (
+        <TableBody 
+          emptyContent="Нет данных о приборах учета."
+          items={meters || []}
+        >
+          {(meter) => (
             <TableRow key={meter.num}>
-              <TableCell>
-                <div className="flex items-center gap-1">{meter.name}<GoDotFill className="text-success" /></div>
-              </TableCell>
-              <TableCell>{meter.num}</TableCell>
-              <TableCell>{meter.verify_date}</TableCell>
-              <TableCell>{Number(meter.rate) / 100} Руб.</TableCell>
-
-              <TableCell>{meter.date}</TableCell>
-              <TableCell>{Number(meter.ind) / 100}</TableCell>
-              <TableCell><Button href='#' variant='solid' color='primary' className="" onPress={()=>setModalState(meter)}>Передать показания</Button></TableCell>
+              {(columnKey) => (
+                <TableCell>
+                  {renderCell(meter, columnKey)}
+                </TableCell>
+              )}
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
       {selectedMeter && (
-        <SendIndicationsModal meter={selectedMeter} address={selectedAddress as Address} isOpen={isOpen} closeModal={closeModal}/>
+        <SendIndicationsModal 
+          meter={selectedMeter} 
+          address={selectedAddress as Address} 
+          isOpen={isOpen} 
+          closeModal={closeModal}
+        />
       )}
     </div>
   );

@@ -6,6 +6,7 @@ import {
   loginHistory,
   loginUserMutation,
   logoutUser,
+  registerUserMutation,
 } from '@entities/session/session.api';
 import { sessionStore } from '@entities/session/session.model';
 import { GenericError } from '@shared/lib/fetch';
@@ -56,6 +57,14 @@ export function useAuthenticatedDevices() {
   return useMutation({
     mutationKey: keys.authenticatedDevices(),
     mutationFn: authenticatedDevices,
+    onError: (error: GenericError<any>) => error,
+  });
+}
+
+export function useRegisterUserMutation() {
+  return useMutation({
+    mutationKey: keys.register(),
+    mutationFn: registerUserMutation,
     onError: (error: GenericError<any>) => error,
   });
 }
